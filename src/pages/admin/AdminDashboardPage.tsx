@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useEffect } from 'react'
 import { Package, CheckCircle, AlertCircle, ShoppingBag } from 'lucide-react'
 import { useAdminStore } from '@/stores/adminStore'
 import { Link } from 'react-router-dom'
@@ -20,8 +20,14 @@ const statusLabels: Record<string, string> = {
 }
 
 export default function AdminDashboardPage() {
-  const { products, orders, getProductStats } = useAdminStore()
-  const stats = useMemo(() => getProductStats(), [getProductStats])
+  const { products, orders, getProductStats, loadProducts, loadOrders } = useAdminStore()
+  
+  useEffect(() => {
+    loadProducts()
+    loadOrders()
+  }, [loadProducts, loadOrders])
+
+  const stats = useMemo(() => getProductStats(), [getProductStats, products])
 
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = {}

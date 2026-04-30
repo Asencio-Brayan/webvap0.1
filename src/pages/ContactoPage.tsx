@@ -1,4 +1,4 @@
-import { MessageCircle, Clock, MapPin, Mail } from 'lucide-react'
+import { MessageCircle, Clock, MapPin, Mail, Facebook } from 'lucide-react'
 
 const zones = [
   { city: 'Lima', price: 10, eta: '2-4 horas' },
@@ -8,6 +8,11 @@ const zones = [
 ]
 
 export default function ContactoPage() {
+  const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '51950332871'
+  const INSTAGRAM_URL = import.meta.env.VITE_INSTAGRAM_URL || ''
+  const TIKTOK_URL = import.meta.env.VITE_TIKTOK_URL || ''
+  const FACEBOOK_URL = import.meta.env.VITE_FACEBOOK_URL || ''
+
   return (
     <>
       <div className="bg-[#141414] pt-28 pb-10 md:pt-32">
@@ -23,7 +28,7 @@ export default function ContactoPage() {
           <div className="rounded-2xl bg-[#141414] p-8">
             {/* WhatsApp */}
             <a
-              href={`https://wa.me/51999999999`}
+              href={`https://wa.me/${WHATSAPP_NUMBER}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-3 rounded-xl bg-[#25D366] py-4 text-sm font-medium text-white transition-all hover:bg-[#1DA851]"
@@ -32,21 +37,48 @@ export default function ContactoPage() {
               Escribenos por WhatsApp
             </a>
 
-            {/* Instagram */}
-            <a
-              href="https://instagram.com/vapequest.pe"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-3 flex items-center justify-center gap-3 rounded-xl border border-transparent bg-gradient-to-r from-[#833AB4]/20 via-[#E1306C]/20 to-[#F77737]/20 py-4 text-sm font-medium text-white transition-all hover:from-[#833AB4]/30 hover:via-[#E1306C]/30 hover:to-[#F77737]/30"
-              style={{ borderImage: 'linear-gradient(to right, #833AB4, #E1306C, #F77737) 1' }}
-            >
-              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <rect x="2" y="2" width="20" height="20" rx="5" />
-                <circle cx="12" cy="12" r="5" />
-                <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none" />
-              </svg>
-              @vapequest.pe
-            </a>
+            {/* Social Media Grid */}
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {/* Instagram */}
+              <a
+                href={INSTAGRAM_URL || '#'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`flex items-center justify-center gap-2 rounded-xl border border-transparent bg-gradient-to-r from-[#833AB4]/20 via-[#E1306C]/20 to-[#F77737]/20 py-3 text-sm font-medium text-white transition-all ${INSTAGRAM_URL ? 'hover:from-[#833AB4]/30 hover:via-[#E1306C]/30 hover:to-[#F77737]/30 cursor-pointer' : 'opacity-50 cursor-not-allowed'}`}
+                style={{ borderImage: 'linear-gradient(to right, #833AB4, #E1306C, #F77737) 1' }}
+              >
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="2" y="2" width="20" height="20" rx="5" />
+                  <circle cx="12" cy="12" r="5" />
+                  <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none" />
+                </svg>
+                Instagram
+              </a>
+
+              {/* TikTok */}
+              <a
+                href={TIKTOK_URL || '#'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`flex items-center justify-center gap-2 rounded-xl bg-black/40 border border-white/10 py-3 text-sm font-medium text-white transition-all ${TIKTOK_URL ? 'hover:bg-black/60 cursor-pointer' : 'opacity-50 cursor-not-allowed'}`}
+              >
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 2.23-1.15 4.14-2.89 5.34-1.74 1.19-3.9 1.56-5.92 1.18-2.02-.38-3.7-1.54-4.83-3.23-1.12-1.68-1.42-3.79-.88-5.74.54-1.95 1.83-3.55 3.56-4.46 1.73-.91 3.79-1.07 5.67-.47v4.06c-1.57-.45-3.25-.11-4.57.94-1.31 1.05-1.94 2.72-1.63 4.38.31 1.66 1.53 3.03 3.12 3.54 1.59.51 3.33.15 4.59-.95 1.26-1.1 1.94-2.76 1.8-4.44V.02z" />
+                </svg>
+                TikTok
+              </a>
+
+              {/* Facebook */}
+              <a
+                href={FACEBOOK_URL || '#'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`flex items-center justify-center gap-2 rounded-xl bg-[#1877F2]/20 border border-[#1877F2]/30 py-3 text-sm font-medium text-white transition-all ${FACEBOOK_URL ? 'hover:bg-[#1877F2]/30 cursor-pointer' : 'opacity-50 cursor-not-allowed'}`}
+              >
+                <Facebook className="h-4 w-4 text-[#1877F2]" />
+                Facebook
+              </a>
+            </div>
 
             <div className="my-6 h-px bg-white/10" />
 

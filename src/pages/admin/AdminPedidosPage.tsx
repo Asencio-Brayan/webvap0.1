@@ -1,7 +1,7 @@
-import { useState, useMemo } from 'react'
-import { ChevronDown, Eye, X } from 'lucide-react'
+import { useState, useMemo, useEffect } from 'react'
+import { ChevronDown, Eye, X, Plus, Trash2 } from 'lucide-react'
 import { useAdminStore } from '@/stores/adminStore'
-import type { Order, OrderStatus } from '@/types/order'
+import type { Order, OrderStatus, OrderItem } from '@/types/order'
 
 const statusConfig: Record<OrderStatus, { label: string; className: string; dot: string }> = {
   pendiente: { label: 'Pendiente', className: 'bg-[#D4A853]/20 text-[#D4A853]', dot: 'bg-[#D4A853]' },
@@ -13,11 +13,42 @@ const statusConfig: Record<OrderStatus, { label: string; className: string; dot:
 
 const allStatuses: (OrderStatus | 'all')[] = ['all', 'pendiente', 'confirmado', 'en_camino', 'entregado', 'cancelado']
 
+const DELIVERY_COSTS: Record<string, number> = {
+  Lima: 10,
+  'Cañete': 15,
+  Chincha: 18,
+  Ica: 20
+}
+
 export default function AdminPedidosPage() {
-  const { orders, updateOrderStatus } = useAdminStore()
+  const { orders, products, updateOrderStatus, loadOrders, loadProducts, createOrder } = useAdminStore()
+
+  useEffect(() => {
+    loadOrders()
+    loadProducts()
+  }, [loadOrders, loadProducts])
+
   const [statusFilter, setStatusFilter] = useState<OrderStatus | 'all'>('all')
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
+
+  // New Order Modal State
+  const [showCreateModal, setShowCreateModal] = useState(false)
+  const [form, setForm] = useState({
+    fullName: '',
+    dni: '',
+    phone: '',
+    city: 'Lima',
+    district: '',
+    address: '',
+    reference: '',
+    paymentMethod: 'Yape',
+    comments: '',
+    ageConfirmed: false,
+    items: [] as OrderItem[],
+  })
+  const [selectedProductId, setSelectedProductId] = useState('')
+  const [productQuantity, setProductQuantity] = useState(1)
 
   const filtered = useMemo(() => {
     if (statusFilter === 'all') return orders
@@ -35,10 +66,110 @@ export default function AdminPedidosPage() {
     setOpenDropdown(null)
   }
 
+  // Calculations
+  const subtotal = form.items.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+  const deliveryCost = DELIVERY_COSTS[form.city] || 10
+  const total = subtotal + deliveryCost
+
+  const handleAddProduct = () => {
+    const product = products.find(p => p.id === parseInt(selectedProductId))
+    if (!product) return
+    if (productQuantity < 1) return
+
+    if (productQuantity > product.stock) {
+      alert(`Cantidad excede el stock disponible (${product.stock})`)
+    }
+
+    const existing = form.items.find(i => i.productId === product.id)
+    if (existing) {
+      setForm(prev => ({
+        ...prev,
+        items: prev.items.map(i => i.productId === product.id ? { ...i, quantity: i.quantity + productQuantity } : i)
+      }))
+    } else {
+      setForm(prev => ({
+        ...prev,
+        items: [...prev.items, {
+          productId: product.id,
+          name: product.name,
+          brand: product.brand,
+          price: product.price,
+          quantity: productQuantity,
+          flavor: product.flavor || '',
+          nicotine: product.nicotine ? String(product.nicotine) : undefined,
+          image: product.image
+        }]
+      }))
+    }
+    
+    setSelectedProductId('')
+    setProductQuantity(1)
+  }
+
+  const removeProduct = (productId: number) => {
+    setForm(prev => ({
+      ...prev,
+      items: prev.items.filter(i => i.productId !== productId)
+    }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (form.items.length === 0) {
+      alert('Debes agregar al menos un producto al pedido')
+      return
+    }
+    
+    if (!form.ageConfirmed) {
+      alert('Debes confirmar que el cliente es mayor de edad')
+      return
+    }
+    
+    const payload = {
+      ...form,
+      subtotal,
+      deliveryCost,
+      total
+    }
+    
+    const success = await createOrder(payload)
+    if (success) {
+      setShowCreateModal(false)
+      setForm({
+        fullName: '',
+        dni: '',
+        phone: '',
+        city: 'Lima',
+        district: '',
+        address: '',
+        reference: '',
+        paymentMethod: 'Yape',
+        comments: '',
+        ageConfirmed: false,
+        items: [],
+      })
+      // Reload orders to ensure state is fresh
+      loadOrders()
+    } else {
+      alert('Error al crear el pedido. Revisa los datos o tu conexión.')
+    }
+  }
+
   return (
     <div>
-      <h1 className="font-display text-3xl text-white">Pedidos</h1>
-      <p className="mt-1 text-[15px] text-white/50">Gestion de pedidos de clientes</p>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h1 className="font-display text-3xl text-white">Pedidos</h1>
+          <p className="mt-1 text-[15px] text-white/50">Gestión de pedidos de clientes</p>
+        </div>
+        <button
+          onClick={() => setShowCreateModal(true)}
+          className="flex items-center gap-2 rounded-xl bg-[#7C9A6B] px-5 py-2.5 text-sm font-medium text-black transition-all hover:bg-[#6B8560]"
+        >
+          <Plus className="h-4 w-4" />
+          Nuevo Pedido
+        </button>
+      </div>
 
       {/* Status filter pills */}
       <div className="mt-6 flex flex-wrap gap-2">
@@ -128,7 +259,7 @@ export default function AdminPedidosPage() {
 
         {filtered.length === 0 && (
           <div className="py-12 text-center">
-            <p className="text-white/40">No hay pedidos en esta categoria</p>
+            <p className="text-white/40">No hay pedidos en esta categoría</p>
           </div>
         )}
       </div>
@@ -171,7 +302,7 @@ export default function AdminPedidosPage() {
                 <div className="mt-3 space-y-2 text-sm">
                   <p className="text-white"><span className="text-white/50">Ciudad:</span> {selectedOrder.city}</p>
                   <p className="text-white"><span className="text-white/50">Distrito:</span> {selectedOrder.district}</p>
-                  <p className="text-white"><span className="text-white/50">Direccion:</span> {selectedOrder.address}</p>
+                  <p className="text-white"><span className="text-white/50">Dirección:</span> {selectedOrder.address}</p>
                   {selectedOrder.reference && (
                     <p className="text-white"><span className="text-white/50">Referencia:</span> {selectedOrder.reference}</p>
                   )}
@@ -212,15 +343,258 @@ export default function AdminPedidosPage() {
               </div>
 
               <div className="text-sm">
-                <p className="text-white/50">Metodo de pago: <span className="text-white capitalize">{selectedOrder.paymentMethod}</span></p>
+                <p className="text-white/50">Método de pago: <span className="text-white capitalize">{selectedOrder.paymentMethod}</span></p>
                 <p className="mt-1 text-white/50">
-                  Mayor de 18 confirmado: <span className="text-green-400">Si</span>
+                  Mayor de 18 confirmado: <span className="text-green-400">Sí</span>
                 </p>
                 {selectedOrder.comments && (
                   <p className="mt-1 text-white/50">Comentarios: <span className="text-white">{selectedOrder.comments}</span></p>
                 )}
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create Manual Order Modal */}
+      {showCreateModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 px-5 py-8">
+          <div className="max-h-[90vh] w-full max-w-[800px] overflow-y-auto rounded-2xl bg-[#141414] border border-white/10">
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/10 bg-[#141414] p-6">
+              <h3 className="text-xl font-medium text-white">Nuevo Pedido Manual</h3>
+              <button onClick={() => setShowCreateModal(false)} className="text-white/40 hover:text-white">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit} className="p-6 space-y-8">
+              {/* Customer Info */}
+              <div>
+                <h4 className="text-sm font-medium text-white mb-4">Datos del Cliente</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-xs text-white/50">Nombre completo *</label>
+                    <input
+                      type="text"
+                      required
+                      value={form.fullName}
+                      onChange={e => setForm(f => ({ ...f, fullName: e.target.value }))}
+                      className="mt-1.5 w-full rounded-lg border border-white/10 bg-[#1A1A1A] px-4 py-2.5 text-sm text-white outline-none focus:border-[#7C9A6B]"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-white/50">DNI / Documento</label>
+                    <input
+                      type="text"
+                      value={form.dni}
+                      onChange={e => setForm(f => ({ ...f, dni: e.target.value }))}
+                      className="mt-1.5 w-full rounded-lg border border-white/10 bg-[#1A1A1A] px-4 py-2.5 text-sm text-white outline-none focus:border-[#7C9A6B]"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-white/50">Celular *</label>
+                    <input
+                      type="tel"
+                      required
+                      value={form.phone}
+                      onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
+                      className="mt-1.5 w-full rounded-lg border border-white/10 bg-[#1A1A1A] px-4 py-2.5 text-sm text-white outline-none focus:border-[#7C9A6B]"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Delivery Info */}
+              <div>
+                <h4 className="text-sm font-medium text-white mb-4">Datos de Entrega</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-xs text-white/50">Ciudad *</label>
+                    <select
+                      value={form.city}
+                      onChange={e => setForm(f => ({ ...f, city: e.target.value }))}
+                      className="mt-1.5 w-full rounded-lg border border-white/10 bg-[#1A1A1A] px-4 py-2.5 text-sm text-white outline-none focus:border-[#7C9A6B]"
+                    >
+                      {Object.keys(DELIVERY_COSTS).map(city => (
+                        <option key={city} value={city}>{city} (S/ {DELIVERY_COSTS[city]})</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-xs text-white/50">Distrito / Zona *</label>
+                    <input
+                      type="text"
+                      required
+                      value={form.district}
+                      onChange={e => setForm(f => ({ ...f, district: e.target.value }))}
+                      className="mt-1.5 w-full rounded-lg border border-white/10 bg-[#1A1A1A] px-4 py-2.5 text-sm text-white outline-none focus:border-[#7C9A6B]"
+                    />
+                  </div>
+                  <div className="col-span-full">
+                    <label className="text-xs text-white/50">Dirección exacta *</label>
+                    <input
+                      type="text"
+                      required
+                      value={form.address}
+                      onChange={e => setForm(f => ({ ...f, address: e.target.value }))}
+                      className="mt-1.5 w-full rounded-lg border border-white/10 bg-[#1A1A1A] px-4 py-2.5 text-sm text-white outline-none focus:border-[#7C9A6B]"
+                    />
+                  </div>
+                  <div className="col-span-full">
+                    <label className="text-xs text-white/50">Referencia</label>
+                    <input
+                      type="text"
+                      value={form.reference}
+                      onChange={e => setForm(f => ({ ...f, reference: e.target.value }))}
+                      className="mt-1.5 w-full rounded-lg border border-white/10 bg-[#1A1A1A] px-4 py-2.5 text-sm text-white outline-none focus:border-[#7C9A6B]"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Products */}
+              <div>
+                <h4 className="text-sm font-medium text-white mb-4">Productos del Pedido</h4>
+                
+                <div className="rounded-xl border border-white/10 p-4 mb-4 bg-white/5">
+                  <div className="flex flex-wrap items-end gap-3">
+                    <div className="flex-1 min-w-[200px]">
+                      <label className="text-xs text-white/50">Buscar Producto</label>
+                      <select
+                        value={selectedProductId}
+                        onChange={e => setSelectedProductId(e.target.value)}
+                        className="mt-1.5 w-full rounded-lg border border-white/10 bg-[#1A1A1A] px-4 py-2.5 text-sm text-white outline-none focus:border-[#7C9A6B]"
+                      >
+                        <option value="">Seleccionar producto...</option>
+                        {products.map(p => (
+                          <option key={p.id} value={p.id}>
+                            {p.name} - S/ {p.price} (Stock: {p.stock})
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="w-24">
+                      <label className="text-xs text-white/50">Cantidad</label>
+                      <input
+                        type="number"
+                        min="1"
+                        value={productQuantity}
+                        onChange={e => setProductQuantity(Number(e.target.value))}
+                        className="mt-1.5 w-full rounded-lg border border-white/10 bg-[#1A1A1A] px-4 py-2.5 text-sm text-white outline-none focus:border-[#7C9A6B]"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleAddProduct}
+                      disabled={!selectedProductId}
+                      className="h-[42px] px-4 rounded-lg bg-[#7C9A6B] text-black text-sm font-medium hover:bg-[#6B8560] disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Agregar
+                    </button>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  {form.items.map(item => (
+                    <div key={item.productId} className="flex items-center gap-4 bg-[#1A1A1A] p-3 rounded-xl border border-white/5">
+                      <img src={item.image} alt={item.name} className="h-12 w-12 rounded-lg object-cover" />
+                      <div className="flex-1">
+                        <p className="text-sm text-white font-medium">{item.name}</p>
+                        <p className="text-xs text-white/50">{item.quantity} x S/ {item.price}</p>
+                      </div>
+                      <div className="text-right mr-4">
+                        <p className="text-sm font-mono text-[#7C9A6B]">S/ {item.price * item.quantity}</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeProduct(item.productId)}
+                        className="p-2 text-white/40 hover:text-red-400 hover:bg-white/5 rounded-lg"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ))}
+                  {form.items.length === 0 && (
+                    <p className="text-sm text-white/30 text-center py-4">No hay productos agregados</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Order Summary & Payment */}
+              <div>
+                <h4 className="text-sm font-medium text-white mb-4">Resumen y Pago</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-xs text-white/50">Método de pago *</label>
+                      <select
+                        value={form.paymentMethod}
+                        onChange={e => setForm(f => ({ ...f, paymentMethod: e.target.value }))}
+                        className="mt-1.5 w-full rounded-lg border border-white/10 bg-[#1A1A1A] px-4 py-2.5 text-sm text-white outline-none focus:border-[#7C9A6B]"
+                      >
+                        <option value="Yape">Yape</option>
+                        <option value="Plin">Plin</option>
+                        <option value="Transferencia">Transferencia</option>
+                        <option value="Contraentrega">Contraentrega</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-xs text-white/50">Comentarios (Opcional)</label>
+                      <textarea
+                        value={form.comments}
+                        onChange={e => setForm(f => ({ ...f, comments: e.target.value }))}
+                        rows={2}
+                        className="mt-1.5 w-full rounded-lg border border-white/10 bg-[#1A1A1A] px-4 py-2.5 text-sm text-white outline-none focus:border-[#7C9A6B]"
+                      />
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        checked={form.ageConfirmed}
+                        onChange={e => setForm(f => ({ ...f, ageConfirmed: e.target.checked }))}
+                        className="w-4 h-4 rounded border-white/20 bg-transparent text-[#7C9A6B] focus:ring-[#7C9A6B] focus:ring-offset-0"
+                      />
+                      <label className="text-sm text-white/80">Confirmo que el cliente es mayor de 18 años *</label>
+                    </div>
+                  </div>
+
+                  <div className="bg-[#1A1A1A] p-5 rounded-xl border border-white/5 h-fit">
+                    <div className="space-y-3 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-white/50">Subtotal</span>
+                        <span className="text-white font-mono">S/ {subtotal}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-white/50">Costo de envío ({form.city})</span>
+                        <span className="text-white font-mono">S/ {deliveryCost}</span>
+                      </div>
+                      <div className="h-px bg-white/10 my-2" />
+                      <div className="flex justify-between text-lg font-medium">
+                        <span className="text-white">Total</span>
+                        <span className="text-[#7C9A6B] font-mono">S/ {total}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Submit */}
+              <div className="sticky bottom-0 bg-[#141414] pt-4 pb-2 border-t border-white/10 flex justify-end gap-3 mt-8">
+                <button
+                  type="button"
+                  onClick={() => setShowCreateModal(false)}
+                  className="px-6 py-2.5 rounded-xl border border-white/10 text-sm font-medium text-white hover:bg-white/5 transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2.5 rounded-xl bg-[#7C9A6B] text-sm font-medium text-black hover:bg-[#6B8560] transition-colors"
+                >
+                  Guardar Pedido
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

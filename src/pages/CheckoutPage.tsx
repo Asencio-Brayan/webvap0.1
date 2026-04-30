@@ -17,7 +17,7 @@ const paymentMethods = [
   { value: 'contraentrega', label: 'Contraentrega' },
 ]
 
-const WHATSAPP_NUMBER = '51999999999'
+const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '51950332871'
 
 interface FormErrors {
   [key: string]: string

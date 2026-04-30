@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react'
-import { Plus, Search, Pencil, Trash2, X } from 'lucide-react'
+import { useState, useMemo, useEffect } from 'react'
+import { Plus, Search, Pencil, Trash2, X, Image as ImageIcon, AlertTriangle, Info } from 'lucide-react'
 import { useAdminStore } from '@/stores/adminStore'
 import type { Product, ProductCategory } from '@/types/product'
 
@@ -21,13 +21,19 @@ const emptyForm: Omit<Product, 'id'> = {
 }
 
 export default function AdminProductosPage() {
-  const { products, addProduct, updateProduct, deleteProduct, toggleProductFeatured } = useAdminStore()
+  const { products, addProduct, updateProduct, deleteProduct, toggleProductFeatured, loadProducts } = useAdminStore()
+  
+  useEffect(() => {
+    loadProducts()
+  }, [loadProducts])
+  
   const [search, setSearch] = useState('')
   const [categoryFilter, setCategoryFilter] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [editingProduct, setEditingProduct] = useState<Product | null>(null)
   const [showDelete, setShowDelete] = useState<Product | null>(null)
   const [form, setForm] = useState<Omit<Product, 'id'>>({ ...emptyForm })
+  const [imageError, setImageError] = useState(false)
 
   const filtered = useMemo(() => {
     let result = [...products]
@@ -46,12 +52,14 @@ export default function AdminProductosPage() {
   const openCreate = () => {
     setEditingProduct(null)
     setForm({ ...emptyForm })
+    setImageError(false)
     setShowModal(true)
   }
 
   const openEdit = (product: Product) => {
     setEditingProduct(product)
     setForm({ ...product })
+    setImageError(false)
     setShowModal(true)
   }
 
@@ -295,14 +303,62 @@ export default function AdminProductosPage() {
                       className="mt-1.5 w-full rounded-lg border border-white/10 bg-[#1A1A1A] px-4 py-2.5 text-sm text-white outline-none focus:border-[#7C9A6B]"
                     />
                   </div>
-                  <div>
-                    <label className="text-xs text-white/50">Imagen URL</label>
+                  <div className="col-span-full">
+                    <label className="text-xs text-white/50">Imagen URL (Supabase Storage o externa)</label>
                     <input
                       type="text"
                       value={form.image}
-                      onChange={(e) => updateFormField('image', e.target.value)}
+                      onChange={(e) => {
+                        updateFormField('image', e.target.value)
+                        setImageError(false)
+                      }}
+                      placeholder="https://tu-proyecto.supabase.co/storage/v1/object/public/..."
                       className="mt-1.5 w-full rounded-lg border border-white/10 bg-[#1A1A1A] px-4 py-2.5 text-sm text-white outline-none focus:border-[#7C9A6B]"
                     />
+                    
+                    {/* Image Preview & Info */}
+                    <div className="mt-4 flex flex-col gap-4 sm:flex-row">
+                      <div className="flex shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-[#1A1A1A] h-32 w-32">
+                        {form.image && !imageError ? (
+                          <img
+                            src={form.image}
+                            alt="Vista previa"
+                            className="h-full w-full object-cover"
+                            onError={() => setImageError(true)}
+                          />
+                        ) : (
+                          <div className="flex flex-col items-center text-white/20">
+                            <ImageIcon className="h-8 w-8 mb-2" />
+                            <span className="text-[10px] uppercase tracking-wider">Sin imagen</span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex-1 space-y-3">
+                        {(!form.image || imageError) && (
+                          <div className="flex items-start gap-2 rounded-lg bg-[#D4A853]/10 p-3 text-sm text-[#D4A853]">
+                            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+                            <p>
+                              {!form.image 
+                                ? 'No has ingresado ninguna URL para la imagen del producto.' 
+                                : 'La URL ingresada no parece ser una imagen valida o no es publica.'}
+                            </p>
+                          </div>
+                        )}
+                        
+                        <div className="rounded-lg border border-white/5 bg-white/5 p-3 text-xs text-white/60">
+                          <div className="flex items-center gap-2 mb-2 font-medium text-white/80">
+                            <Info className="h-4 w-4" /> Recomendaciones:
+                          </div>
+                          <ul className="list-inside list-disc space-y-1 ml-1">
+                            <li>Medida recomendada: <strong>1200 x 1200 px</strong></li>
+                            <li>Formato recomendado: <strong>JPG, PNG o WEBP</strong></li>
+                            <li>Peso maximo recomendado: <strong>3 MB</strong></li>
+                            <li>Usa imagen cuadrada, producto centrado y fondo limpio.</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

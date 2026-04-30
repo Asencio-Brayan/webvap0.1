@@ -10,12 +10,15 @@ interface AdminStore {
   orders: Order[];
   login: (email?: string, password?: string) => Promise<{success: boolean; error?: string}> | void;
   logout: () => void;
+  loadProducts: () => Promise<void>;
+  loadOrders: () => Promise<void>;
   addProduct: (product: Omit<Product, 'id'>) => void;
   updateProduct: (id: number, data: Partial<Product>) => void;
   deleteProduct: (id: number) => void;
   toggleProductActive: (id: number) => void;
   toggleProductFeatured: (id: number) => void;
   updateOrderStatus: (id: string, status: OrderStatus) => void;
+  createOrder: (data: any) => Promise<boolean>;
   getProductStats: () => { total: number; active: number; outOfStock: number };
   getOrdersByStatus: (status: OrderStatus | 'all') => Order[];
 }
@@ -58,6 +61,64 @@ export const useAdminStore = create<AdminStore>((set, get) => ({
   logout: () => {
     localStorage.removeItem('admin_token');
     set({ isLoggedIn: false });
+  },
+
+  loadProducts: async () => {
+    const USE_API = import.meta.env.VITE_USE_API === 'true';
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+    const token = localStorage.getItem('admin_token');
+
+    if (USE_API && token) {
+      try {
+        const res = await fetch(`${API_URL}/api/admin/products`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        if (res.status === 401) {
+          localStorage.removeItem('admin_token');
+          set({ isLoggedIn: false });
+          return;
+        }
+
+        if (res.ok) {
+          const fetchedProducts = await res.json();
+          set({ products: fetchedProducts });
+        }
+      } catch (e) {
+        console.warn('API loadProducts failed, falling back to mock', e);
+      }
+    }
+  },
+
+  loadOrders: async () => {
+    const USE_API = import.meta.env.VITE_USE_API === 'true';
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+    const token = localStorage.getItem('admin_token');
+
+    if (USE_API && token) {
+      try {
+        const res = await fetch(`${API_URL}/api/admin/orders`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        if (res.status === 401) {
+          localStorage.removeItem('admin_token');
+          set({ isLoggedIn: false });
+          return;
+        }
+
+        if (res.ok) {
+          const fetchedOrders = await res.json();
+          const parsedOrders = fetchedOrders.map((o: any) => ({
+            ...o,
+            createdAt: new Date(o.createdAt)
+          }));
+          set({ orders: parsedOrders });
+        }
+      } catch (e) {
+        console.warn('API loadOrders failed, falling back to mock', e);
+      }
+    }
   },
 
   addProduct: async (product) => {
@@ -223,6 +284,38 @@ export const useAdminStore = create<AdminStore>((set, get) => ({
         o.id === id ? { ...o, status } : o
       ),
     }));
+  },
+
+  createOrder: async (data) => {
+    const USE_API = import.meta.env.VITE_USE_API === 'true';
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+    const token = localStorage.getItem('admin_token');
+
+    if (USE_API && token) {
+      try {
+        const res = await fetch(`${API_URL}/api/admin/orders`, {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}` 
+          },
+          body: JSON.stringify(data)
+        });
+        
+        if (res.ok) {
+          const newOrder = await res.json();
+          // Convert date
+          newOrder.createdAt = new Date(newOrder.createdAt);
+          set((state) => ({
+            orders: [newOrder, ...state.orders]
+          }));
+          return true;
+        }
+      } catch (e) {
+        console.warn('API createOrder failed:', e);
+      }
+    }
+    return false;
   },
 
   getProductStats: () => {

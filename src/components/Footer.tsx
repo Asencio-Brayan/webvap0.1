@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { MapPin, Clock, MessageCircle } from 'lucide-react'
+import { MapPin, Clock, MessageCircle, Facebook } from 'lucide-react'
 
 const quickLinks = [
   { to: '/', label: 'Inicio' },
@@ -17,6 +17,10 @@ const zones = [
 ]
 
 export default function Footer() {
+  const INSTAGRAM_URL = import.meta.env.VITE_INSTAGRAM_URL || ''
+  const TIKTOK_URL = import.meta.env.VITE_TIKTOK_URL || ''
+  const FACEBOOK_URL = import.meta.env.VITE_FACEBOOK_URL || ''
+
   return (
     <footer className="bg-[#141414] pt-16 pb-8">
       <div className="mx-auto max-w-7xl px-5 md:px-12">
@@ -64,7 +68,7 @@ export default function Footer() {
             <ul className="mt-4 space-y-3">
               <li className="flex items-center gap-2.5 text-[15px] text-white/70">
                 <MessageCircle className="h-4 w-4 shrink-0 text-[#7C9A6B]" />
-                +51 999 999 999
+                +51 950 332 871
               </li>
               <li className="flex items-center gap-2.5 text-[15px] text-white/70">
                 <Clock className="h-4 w-4 shrink-0 text-[#7C9A6B]" />
@@ -75,6 +79,25 @@ export default function Footer() {
                 Lima, Peru
               </li>
             </ul>
+
+            {/* Social Media Links */}
+            <div className="mt-6 flex gap-4">
+              {INSTAGRAM_URL && (
+                <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition-colors" title="Instagram">
+                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="2" width="20" height="20" rx="5" /><circle cx="12" cy="12" r="5" /><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none" /></svg>
+                </a>
+              )}
+              {TIKTOK_URL && (
+                <a href={TIKTOK_URL} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition-colors" title="TikTok">
+                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 2.23-1.15 4.14-2.89 5.34-1.74 1.19-3.9 1.56-5.92 1.18-2.02-.38-3.7-1.54-4.83-3.23-1.12-1.68-1.42-3.79-.88-5.74.54-1.95 1.83-3.55 3.56-4.46 1.73-.91 3.79-1.07 5.67-.47v4.06c-1.57-.45-3.25-.11-4.57.94-1.31 1.05-1.94 2.72-1.63 4.38.31 1.66 1.53 3.03 3.12 3.54 1.59.51 3.33.15 4.59-.95 1.26-1.1 1.94-2.76 1.8-4.44V.02z" /></svg>
+                </a>
+              )}
+              {FACEBOOK_URL && (
+                <a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition-colors" title="Facebook">
+                  <Facebook className="h-5 w-5" />
+                </a>
+              )}
+            </div>
           </div>
         </div>
 
