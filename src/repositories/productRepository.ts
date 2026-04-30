@@ -295,9 +295,26 @@ export const mockProducts: Product[] = [
   },
 ];
 
+const USE_API = import.meta.env.VITE_USE_API === 'true';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+
+const getAllProducts = async (): Promise<Product[]> => {
+  if (USE_API) {
+    try {
+      const res = await fetch(`${API_URL}/api/products`);
+      if (res.ok) {
+        return await res.json();
+      }
+    } catch (e) {
+      console.warn('API fetch failed, falling back to mock data', e);
+    }
+  }
+  return [...mockProducts];
+};
+
 export const productRepository = {
   getProducts: async (filters?: ProductFilters): Promise<Product[]> => {
-    let result = [...mockProducts];
+    let result = await getAllProducts();
 
     if (filters?.categories?.length) {
       result = result.filter((p) => filters.categories!.includes(p.category));
@@ -346,20 +363,33 @@ export const productRepository = {
   },
 
   getProductById: async (id: number): Promise<Product | undefined> => {
+    if (USE_API) {
+      try {
+        const res = await fetch(`${API_URL}/api/products/${id}`);
+        if (res.ok) {
+          return await res.json();
+        }
+      } catch (e) {
+        console.warn(`Failed to fetch product ${id}, falling back to mock`, e);
+      }
+    }
     return mockProducts.find((p) => p.id === id);
   },
 
   getFeaturedProducts: async (): Promise<Product[]> => {
-    return mockProducts.filter((p) => p.featured);
+    const products = await getAllProducts();
+    return products.filter((p) => p.featured);
   },
 
   getProductsByCategory: async (category: ProductCategory): Promise<Product[]> => {
-    return mockProducts.filter((p) => p.category === category);
+    const products = await getAllProducts();
+    return products.filter((p) => p.category === category);
   },
 
   searchProducts: async (query: string): Promise<Product[]> => {
     const q = query.toLowerCase();
-    return mockProducts.filter(
+    const products = await getAllProducts();
+    return products.filter(
       (p) =>
         p.name.toLowerCase().includes(q) ||
         p.brand.toLowerCase().includes(q) ||

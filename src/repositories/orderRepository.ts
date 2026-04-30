@@ -67,8 +67,29 @@ let orders: Order[] = [
 
 export const mockOrders = orders;
 
+const USE_API = import.meta.env.VITE_USE_API === 'true';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+
+const getAuthHeaders = (): Record<string, string> => {
+  const token = localStorage.getItem('admin_token');
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
 export const orderRepository = {
   createOrder: async (data: CreateOrderInput): Promise<Order> => {
+    if (USE_API) {
+      try {
+        const res = await fetch(`${API_URL}/api/orders`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (res.ok) return await res.json();
+      } catch (e) {
+        console.warn('API createOrder failed, falling back to mock');
+      }
+    }
+
     const newOrder: Order = {
       id: `VQ-${String(orders.length + 1).padStart(3, '0')}`,
       customerName: data.fullName,
@@ -93,14 +114,50 @@ export const orderRepository = {
   },
 
   getOrders: async (): Promise<Order[]> => {
+    if (USE_API) {
+      try {
+        const res = await fetch(`${API_URL}/api/admin/orders`, {
+          headers: { ...getAuthHeaders() }
+        });
+        if (res.ok) return await res.json();
+      } catch (e) {
+        console.warn('API getOrders failed, falling back to mock');
+      }
+    }
     return [...orders];
   },
 
   getOrderById: async (id: string): Promise<Order | undefined> => {
+    if (USE_API) {
+      try {
+        const res = await fetch(`${API_URL}/api/admin/orders`, {
+          headers: { ...getAuthHeaders() }
+        });
+        if (res.ok) {
+          const fetchedOrders = await res.json();
+          return fetchedOrders.find((o: Order) => o.id === id);
+        }
+      } catch (e) {
+        console.warn('API getOrderById failed, falling back to mock');
+      }
+    }
     return orders.find((o) => o.id === id);
   },
 
   updateOrderStatus: async (id: string, status: OrderStatus): Promise<Order> => {
+    if (USE_API) {
+      try {
+        const res = await fetch(`${API_URL}/api/admin/orders/${id}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+          body: JSON.stringify({ status })
+        });
+        if (res.ok) return await res.json();
+      } catch(e) {
+        console.warn('API updateOrderStatus failed, falling back to mock');
+      }
+    }
+
     const order = orders.find((o) => o.id === id);
     if (!order) throw new Error('Order not found');
     order.status = status;

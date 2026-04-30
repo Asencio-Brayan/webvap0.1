@@ -8,13 +8,27 @@ export default function AdminLoginPage() {
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [email, setEmail] = useState('admin@vapequest.pe')
+  const [password, setPassword] = useState('admin123')
+  const [error, setError] = useState('')
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    setTimeout(() => {
-     login()
-     navigate('/admin/dashboard', { replace: true })
-    }, 1000)
+    setError('')
+    
+    try {
+      const result = await login(email, password)
+      if (result && result.success) {
+        navigate('/admin/dashboard', { replace: true })
+      } else {
+        setError(result?.error || 'Error al iniciar sesión')
+      }
+    } catch (e) {
+      setError('Error de conexión')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -36,11 +50,17 @@ export default function AdminLoginPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+          {error && (
+            <div className="rounded-xl bg-red-500/10 border border-red-500/20 p-3 text-sm text-red-500 text-center">
+              {error}
+            </div>
+          )}
           <div>
             <input
               type="email"
               placeholder="admin@vapequest.pe"
-              defaultValue="admin@vapequest.pe"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-xl border border-white/10 bg-[#1A1A1A] px-4 py-3.5 text-sm text-white placeholder:text-white/30 outline-none focus:border-[#7C9A6B]"
             />
           </div>
@@ -48,7 +68,8 @@ export default function AdminLoginPage() {
             <input
               type={showPassword ? 'text' : 'password'}
               placeholder="Contrasena"
-              defaultValue="admin123"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full rounded-xl border border-white/10 bg-[#1A1A1A] px-4 py-3.5 pr-12 text-sm text-white placeholder:text-white/30 outline-none focus:border-[#7C9A6B]"
             />
             <button
