@@ -8,12 +8,18 @@ export default function AdminLoginPage() {
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
 
-  const [email, setEmail] = useState('admin@vapequest.pe')
-  const [password, setPassword] = useState('admin123')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (!email || !password) {
+      setError('Por favor ingrese correo y contraseña')
+      return
+    }
+
     setLoading(true)
     setError('')
     

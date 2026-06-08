@@ -54,8 +54,11 @@ export const useAdminStore = create<AdminStore>((set, get) => ({
     }
     
     // Mock fallback
-    set({ isLoggedIn: true });
-    return { success: true };
+    if (email === 'admin@vapequest.pe' && password === 'admin') {
+      set({ isLoggedIn: true });
+      return { success: true };
+    }
+    return { success: false, error: 'Credenciales inválidas' };
   },
   
   logout: () => {
