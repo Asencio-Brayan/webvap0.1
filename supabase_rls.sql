@@ -10,21 +10,21 @@ ON "Product" FOR SELECT
 TO public
 USING (true);
 
--- Solo usuarios autenticados (admin) pueden CREAR, ACTUALIZAR o ELIMINAR productos
+-- Solo el administrador específico puede CREAR, ACTUALIZAR o ELIMINAR productos
 CREATE POLICY "Admins can insert products"
 ON "Product" FOR INSERT
 TO authenticated
-WITH CHECK (true);
+WITH CHECK (auth.jwt() ->> 'email' = 'admin@vapequest.pe');
 
 CREATE POLICY "Admins can update products"
 ON "Product" FOR UPDATE
 TO authenticated
-USING (true);
+USING (auth.jwt() ->> 'email' = 'admin@vapequest.pe');
 
 CREATE POLICY "Admins can delete products"
 ON "Product" FOR DELETE
 TO authenticated
-USING (true);
+USING (auth.jwt() ->> 'email' = 'admin@vapequest.pe');
 
 -- 3. Políticas para "Order" y "OrderItem"
 -- Todo el mundo puede CREAR pedidos (los clientes no están logueados cuando compran)
@@ -38,34 +38,34 @@ ON "OrderItem" FOR INSERT
 TO public
 WITH CHECK (true);
 
--- Solo el administrador puede LEER, ACTUALIZAR o ELIMINAR pedidos
+-- Solo el administrador específico puede LEER, ACTUALIZAR o ELIMINAR pedidos
 CREATE POLICY "Admins can read orders"
 ON "Order" FOR SELECT
 TO authenticated
-USING (true);
+USING (auth.jwt() ->> 'email' = 'admin@vapequest.pe');
 
 CREATE POLICY "Admins can update orders"
 ON "Order" FOR UPDATE
 TO authenticated
-USING (true);
+USING (auth.jwt() ->> 'email' = 'admin@vapequest.pe');
 
 CREATE POLICY "Admins can delete orders"
 ON "Order" FOR DELETE
 TO authenticated
-USING (true);
+USING (auth.jwt() ->> 'email' = 'admin@vapequest.pe');
 
 -- Igual para los items del pedido
 CREATE POLICY "Admins can read order items"
 ON "OrderItem" FOR SELECT
 TO authenticated
-USING (true);
+USING (auth.jwt() ->> 'email' = 'admin@vapequest.pe');
 
 CREATE POLICY "Admins can update order items"
 ON "OrderItem" FOR UPDATE
 TO authenticated
-USING (true);
+USING (auth.jwt() ->> 'email' = 'admin@vapequest.pe');
 
 CREATE POLICY "Admins can delete order items"
 ON "OrderItem" FOR DELETE
 TO authenticated
-USING (true);
+USING (auth.jwt() ->> 'email' = 'admin@vapequest.pe');
