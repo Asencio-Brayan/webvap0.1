@@ -13,14 +13,16 @@ const navItems = [
 export default function AdminLayout() {
   const location = useLocation()
   const navigate = useNavigate()
-  const { isLoggedIn, logout } = useAdminStore()
+  const { isLoggedIn, checkSession, logout } = useAdminStore()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      navigate('/admin')
-    }
-  }, [isLoggedIn, navigate])
+    checkSession().then(() => {
+      if (!useAdminStore.getState().isLoggedIn) {
+        navigate('/admin')
+      }
+    })
+  }, [checkSession, navigate])
 
   if (!isLoggedIn) return null
 

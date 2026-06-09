@@ -1,216 +1,142 @@
 import { create } from 'zustand';
 import type { Product } from '@/types/product';
 import type { Order, OrderStatus } from '@/types/order';
-import { mockProducts } from '@/repositories/productRepository';
-import { mockOrders } from '@/repositories/orderRepository';
+import { supabase } from '@/lib/supabase';
 
 interface AdminStore {
   isLoggedIn: boolean;
   products: Product[];
   orders: Order[];
   login: (email?: string, password?: string) => Promise<{success: boolean; error?: string}> | void;
-  logout: () => void;
+  logout: () => Promise<void>;
   loadProducts: () => Promise<void>;
   loadOrders: () => Promise<void>;
-  addProduct: (product: Omit<Product, 'id'>) => void;
-  updateProduct: (id: number, data: Partial<Product>) => void;
-  deleteProduct: (id: number) => void;
-  toggleProductActive: (id: number) => void;
-  toggleProductFeatured: (id: number) => void;
-  updateOrderStatus: (id: string, status: OrderStatus) => void;
+  addProduct: (product: Omit<Product, 'id'>) => Promise<void>;
+  updateProduct: (id: number, data: Partial<Product>) => Promise<void>;
+  deleteProduct: (id: number) => Promise<void>;
+  toggleProductActive: (id: number) => Promise<void>;
+  toggleProductFeatured: (id: number) => Promise<void>;
+  updateOrderStatus: (id: string, status: OrderStatus) => Promise<void>;
   createOrder: (data: any) => Promise<boolean>;
   getProductStats: () => { total: number; active: number; outOfStock: number };
   getOrdersByStatus: (status: OrderStatus | 'all') => Order[];
+  checkSession: () => Promise<void>;
 }
 
 export const useAdminStore = create<AdminStore>((set, get) => ({
   isLoggedIn: false,
-  products: [...mockProducts],
-  orders: [...mockOrders],
+  products: [],
+  orders: [],
+
+  checkSession: async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    set({ isLoggedIn: !!session });
+  },
 
   login: async (email?: string, password?: string) => {
-    const USE_API = import.meta.env.VITE_USE_API === 'true';
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+    if (!email || !password) return { success: false, error: 'Credenciales requeridas' };
+    
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-    if (USE_API && email && password) {
-      try {
-        const res = await fetch(`${API_URL}/api/admin/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
-        });
-        
-        if (res.ok) {
-          const data = await res.json();
-          localStorage.setItem('admin_token', data.token);
-          set({ isLoggedIn: true });
-          return { success: true };
-        } else {
-          return { success: false, error: 'Invalid credentials' };
-        }
-      } catch (e) {
-        console.warn('API login failed, falling back to mock login', e);
-      }
+    if (error) {
+      return { success: false, error: 'Credenciales inválidas' };
     }
     
-    // Mock fallback
-    if (email === 'admin@vapequest.pe' && password === 'admin') {
-      set({ isLoggedIn: true });
-      return { success: true };
-    }
-    return { success: false, error: 'Credenciales inválidas' };
+    set({ isLoggedIn: true });
+    return { success: true };
   },
   
-  logout: () => {
-    localStorage.removeItem('admin_token');
-    set({ isLoggedIn: false });
+  logout: async () => {
+    await supabase.auth.signOut();
+    set({ isLoggedIn: false, products: [], orders: [] });
   },
 
   loadProducts: async () => {
-    const USE_API = import.meta.env.VITE_USE_API === 'true';
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-    const token = localStorage.getItem('admin_token');
+    const { data, error } = await supabase
+      .from('Product')
+      .select('*')
+      .order('id', { ascending: false });
 
-    if (USE_API && token) {
-      try {
-        const res = await fetch(`${API_URL}/api/admin/products`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        
-        if (res.status === 401) {
-          localStorage.removeItem('admin_token');
-          set({ isLoggedIn: false });
-          return;
-        }
-
-        if (res.ok) {
-          const fetchedProducts = await res.json();
-          set({ products: fetchedProducts });
-        }
-      } catch (e) {
-        console.warn('API loadProducts failed, falling back to mock', e);
-      }
+    if (error) {
+      console.error('Error loading products:', error);
+      return;
+    }
+    if (data) {
+      set({ products: data });
     }
   },
 
   loadOrders: async () => {
-    const USE_API = import.meta.env.VITE_USE_API === 'true';
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-    const token = localStorage.getItem('admin_token');
+    const { data, error } = await supabase
+      .from('Order')
+      .select('*, items:OrderItem(*)')
+      .order('createdAt', { ascending: false });
 
-    if (USE_API && token) {
-      try {
-        const res = await fetch(`${API_URL}/api/admin/orders`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        
-        if (res.status === 401) {
-          localStorage.removeItem('admin_token');
-          set({ isLoggedIn: false });
-          return;
-        }
-
-        if (res.ok) {
-          const fetchedOrders = await res.json();
-          const parsedOrders = fetchedOrders.map((o: any) => ({
-            ...o,
-            createdAt: new Date(o.createdAt)
-          }));
-          set({ orders: parsedOrders });
-        }
-      } catch (e) {
-        console.warn('API loadOrders failed, falling back to mock', e);
-      }
+    if (error) {
+      console.error('Error loading orders:', error);
+      return;
+    }
+    if (data) {
+      const parsedOrders = data.map((o: any) => ({
+        ...o,
+        createdAt: new Date(o.createdAt)
+      }));
+      set({ orders: parsedOrders });
     }
   },
 
   addProduct: async (product) => {
-    const USE_API = import.meta.env.VITE_USE_API === 'true';
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-    const token = localStorage.getItem('admin_token');
+    // Remove empty id if present to let DB autoincrement
+    const { id, ...productData } = product as any;
     
-    if (USE_API) {
-      try {
-        const res = await fetch(`${API_URL}/api/admin/products`, {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            ...(token ? { Authorization: `Bearer ${token}` } : {})
-          } as Record<string, string>,
-          body: JSON.stringify(product)
-        });
-        if (res.ok) {
-          const createdProduct = await res.json();
-          set((state) => ({ products: [...state.products, createdProduct] }));
-          return;
-        }
-      } catch (e) {
-        console.warn('API addProduct failed, falling back to mock', e);
-      }
+    const { data, error } = await supabase
+      .from('Product')
+      .insert([productData])
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error adding product:', error);
+      return;
     }
 
-    set((state) => ({
-      products: [
-        ...state.products,
-        { ...product, id: Math.max(...state.products.map((p) => p.id), 0) + 1 },
-      ],
-    }));
+    if (data) {
+      set((state) => ({ products: [data, ...state.products] }));
+    }
   },
 
   updateProduct: async (id, data) => {
-    const USE_API = import.meta.env.VITE_USE_API === 'true';
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-    const token = localStorage.getItem('admin_token');
+    const { data: updated, error } = await supabase
+      .from('Product')
+      .update(data)
+      .eq('id', id)
+      .select()
+      .single();
 
-    if (USE_API) {
-      try {
-        const res = await fetch(`${API_URL}/api/admin/products/${id}`, {
-          method: 'PUT',
-          headers: { 
-            'Content-Type': 'application/json',
-            ...(token ? { Authorization: `Bearer ${token}` } : {})
-          } as Record<string, string>,
-          body: JSON.stringify(data)
-        });
-        if (res.ok) {
-          const updatedProduct = await res.json();
-          set((state) => ({
-            products: state.products.map((p) => (p.id === id ? updatedProduct : p)),
-          }));
-          return;
-        }
-      } catch(e) {
-        console.warn('API updateProduct failed, falling back to mock', e);
-      }
+    if (error) {
+      console.error('Error updating product:', error);
+      return;
     }
 
-    set((state) => ({
-      products: state.products.map((p) =>
-        p.id === id ? { ...p, ...data } : p
-      ),
-    }));
+    if (updated) {
+      set((state) => ({
+        products: state.products.map((p) => (p.id === id ? updated : p)),
+      }));
+    }
   },
 
   deleteProduct: async (id) => {
-    const USE_API = import.meta.env.VITE_USE_API === 'true';
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-    const token = localStorage.getItem('admin_token');
+    const { error } = await supabase
+      .from('Product')
+      .delete()
+      .eq('id', id);
 
-    if (USE_API) {
-      try {
-        const res = await fetch(`${API_URL}/api/admin/products/${id}`, {
-          method: 'DELETE',
-          headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) } as Record<string, string>
-        });
-        if (res.ok) {
-          set((state) => ({
-            products: state.products.filter((p) => p.id !== id),
-          }));
-          return;
-        }
-      } catch(e) {
-        console.warn('API deleteProduct failed, falling back to mock', e);
-      }
+    if (error) {
+      console.error('Error deleting product:', error);
+      return;
     }
 
     set((state) => ({
@@ -219,106 +145,111 @@ export const useAdminStore = create<AdminStore>((set, get) => ({
   },
 
   toggleProductActive: async (id) => {
-    const USE_API = import.meta.env.VITE_USE_API === 'true';
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-    const token = localStorage.getItem('admin_token');
+    const p = get().products.find(p => p.id === id);
+    if (!p) return;
+    
+    const newStock = p.stock > 0 ? 0 : 10;
+    
+    const { data: updated, error } = await supabase
+      .from('Product')
+      .update({ stock: newStock })
+      .eq('id', id)
+      .select()
+      .single();
 
-    if (USE_API) {
-      try {
-        const res = await fetch(`${API_URL}/api/admin/products/${id}/status`, {
-          method: 'PATCH',
-          headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) } as Record<string, string>
-        });
-        if (res.ok) {
-          const updatedProduct = await res.json();
-          set((state) => ({
-            products: state.products.map((p) => (p.id === id ? updatedProduct : p)),
-          }));
-          return;
-        }
-      } catch(e) {
-        console.warn('API toggleProductActive failed, falling back to mock', e);
-      }
+    if (error) {
+      console.error('Error toggling active:', error);
+      return;
     }
 
-    set((state) => ({
-      products: state.products.map((p) =>
-        p.id === id ? { ...p, stock: p.stock > 0 ? 0 : 10 } : p
-      ),
-    }));
+    if (updated) {
+      set((state) => ({
+        products: state.products.map((p) => (p.id === id ? updated : p)),
+      }));
+    }
   },
 
-  toggleProductFeatured: (id) =>
-    set((state) => ({
-      products: state.products.map((p) =>
-        p.id === id ? { ...p, featured: !p.featured } : p
-      ),
-    })),
+  toggleProductFeatured: async (id) => {
+    const p = get().products.find(p => p.id === id);
+    if (!p) return;
 
-  updateOrderStatus: async (id, status) => {
-    const USE_API = import.meta.env.VITE_USE_API === 'true';
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-    const token = localStorage.getItem('admin_token');
+    const { data: updated, error } = await supabase
+      .from('Product')
+      .update({ featured: !p.featured })
+      .eq('id', id)
+      .select()
+      .single();
 
-    if (USE_API) {
-      try {
-        const res = await fetch(`${API_URL}/api/admin/orders/${id}/status`, {
-          method: 'PATCH',
-          headers: { 
-            'Content-Type': 'application/json',
-            ...(token ? { Authorization: `Bearer ${token}` } : {})
-          } as Record<string, string>,
-          body: JSON.stringify({ status })
-        });
-        if (res.ok) {
-          const updatedOrder = await res.json();
-          set((state) => ({
-            orders: state.orders.map((o) => (o.id === id ? updatedOrder : o)),
-          }));
-          return;
-        }
-      } catch(e) {
-        console.warn('API updateOrderStatus failed, falling back to mock', e);
-      }
+    if (error) {
+      console.error('Error toggling featured:', error);
+      return;
     }
 
-    set((state) => ({
-      orders: state.orders.map((o) =>
-        o.id === id ? { ...o, status } : o
-      ),
-    }));
+    if (updated) {
+      set((state) => ({
+        products: state.products.map((p) => (p.id === id ? updated : p)),
+      }));
+    }
+  },
+
+  updateOrderStatus: async (id, status) => {
+    const { data: updated, error } = await supabase
+      .from('Order')
+      .update({ status })
+      .eq('id', id)
+      .select('*, items:OrderItem(*)')
+      .single();
+
+    if (error) {
+      console.error('Error updating order status:', error);
+      return;
+    }
+
+    if (updated) {
+      updated.createdAt = new Date(updated.createdAt);
+      set((state) => ({
+        orders: state.orders.map((o) => (o.id === id ? updated : o)),
+      }));
+    }
   },
 
   createOrder: async (data) => {
-    const USE_API = import.meta.env.VITE_USE_API === 'true';
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-    const token = localStorage.getItem('admin_token');
+    // Separate order data from items
+    const { items, ...orderData } = data;
+    
+    // 1. Insert Order
+    const { data: orderResult, error: orderError } = await supabase
+      .from('Order')
+      .insert([orderData])
+      .select()
+      .single();
 
-    if (USE_API && token) {
-      try {
-        const res = await fetch(`${API_URL}/api/admin/orders`, {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}` 
-          },
-          body: JSON.stringify(data)
-        });
-        
-        if (res.ok) {
-          const newOrder = await res.json();
-          // Convert date
-          newOrder.createdAt = new Date(newOrder.createdAt);
-          set((state) => ({
-            orders: [newOrder, ...state.orders]
-          }));
-          return true;
-        }
-      } catch (e) {
-        console.warn('API createOrder failed:', e);
+    if (orderError) {
+      console.error('Error creating order:', orderError);
+      return false;
+    }
+
+    // 2. Insert Items
+    if (items && items.length > 0) {
+      const itemsToInsert = items.map((item: any) => ({
+        ...item,
+        orderId: orderResult.id
+      }));
+
+      const { error: itemsError } = await supabase
+        .from('OrderItem')
+        .insert(itemsToInsert);
+
+      if (itemsError) {
+        console.error('Error creating order items:', itemsError);
+        // Should ideally rollback, but for simplicity returning false
+        return false;
       }
     }
-    return false;
+
+    // Refresh orders to get the complete related order
+    await get().loadOrders();
+    return true;
   },
 
   getProductStats: () => {
