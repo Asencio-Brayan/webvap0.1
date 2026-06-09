@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AlertTriangle } from 'lucide-react'
 import { useCartStore } from '@/stores/cartStore'
-
+import { orderRepository } from '@/repositories/orderRepository'
 const cities = [
   { name: 'Lima' as const, cost: 10 },
   { name: 'Canete' as const, cost: 15 },
@@ -84,9 +84,32 @@ export default function CheckoutPage() {
       `Comentarios: ${form.comments || 'Ninguno'}`
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!validate()) return
+
+    const orderData = {
+      fullName: form.fullName,
+      dni: form.dni,
+      phone: form.phone,
+      city: form.city as 'Lima' | 'Canete' | 'Chincha' | 'Ica',
+      district: form.district,
+      address: form.address,
+      reference: form.reference,
+      items: items,
+      subtotal: getSubtotal(),
+      deliveryCost: getDeliveryCost(),
+      total: getTotal(),
+      paymentMethod: form.paymentMethod as any,
+      ageConfirmed: form.ageConfirmed,
+      comments: form.comments,
+    };
+
+    const order = await orderRepository.createOrder(orderData);
+    if (!order) {
+      alert('Hubo un error al registrar el pedido. Por favor, intenta nuevamente.');
+      return;
+    }
 
     const message = generateWhatsAppMessage()
     clearCart()
