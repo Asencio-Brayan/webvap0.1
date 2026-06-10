@@ -18,6 +18,7 @@ const emptyForm: Omit<Product, 'id'> = {
   description: '',
   specs: {},
   images: [],
+  flavors: [],
 }
 
 export default function AdminProductosPage() {
@@ -65,10 +66,20 @@ export default function AdminProductosPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Clean up empty flavors
+    const cleanedForm = { ...form }
+    if (cleanedForm.flavors) {
+      cleanedForm.flavors = cleanedForm.flavors.filter(f => f.trim() !== '')
+      if (cleanedForm.flavors.length > 0 && !cleanedForm.flavor) {
+        cleanedForm.flavor = cleanedForm.flavors[0]; // Set fallback flavor
+      }
+    }
+
     if (editingProduct) {
-      updateProduct(editingProduct.id, form)
+      updateProduct(editingProduct.id, cleanedForm)
     } else {
-      addProduct(form)
+      addProduct(cleanedForm)
     }
     setShowModal(false)
   }
@@ -284,13 +295,43 @@ export default function AdminProductosPage() {
                 <p className="text-sm font-medium text-white">Detalles</p>
                 <div className="mt-4 space-y-4">
                   <div>
-                    <label className="text-xs text-white/50">Sabor</label>
-                    <input
-                      type="text"
-                      value={form.flavor}
-                      onChange={(e) => updateFormField('flavor', e.target.value)}
-                      className="mt-1.5 w-full rounded-lg border border-white/10 bg-[#1A1A1A] px-4 py-2.5 text-sm text-white outline-none focus:border-[#7C9A6B]"
-                    />
+                    <label className="text-xs text-white/50">Sabores</label>
+                    <div className="mt-2 space-y-2">
+                      {form.flavors && form.flavors.map((flavor, index) => (
+                        <div key={index} className="flex items-center gap-2">
+                          <input
+                            type="text"
+                            value={flavor}
+                            onChange={(e) => {
+                              const newFlavors = [...(form.flavors || [])];
+                              newFlavors[index] = e.target.value;
+                              updateFormField('flavors', newFlavors);
+                            }}
+                            className="w-full rounded-lg border border-white/10 bg-[#1A1A1A] px-4 py-2.5 text-sm text-white outline-none focus:border-[#7C9A6B]"
+                            placeholder="Ej. Sandia Ice"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const newFlavors = [...(form.flavors || [])];
+                              newFlavors.splice(index, 1);
+                              updateFormField('flavors', newFlavors);
+                            }}
+                            className="rounded-lg p-2.5 text-white/40 hover:bg-white/5 hover:text-red-400"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      ))}
+                      <button
+                        type="button"
+                        onClick={() => updateFormField('flavors', [...(form.flavors || []), ''])}
+                        className="flex items-center gap-1.5 rounded-lg border border-white/10 px-3 py-2 text-xs text-white/70 hover:bg-white/5 hover:text-white"
+                      >
+                        <Plus className="h-3 w-3" />
+                        Agregar Sabor
+                      </button>
+                    </div>
                   </div>
                   <div>
                     <label className="text-xs text-white/50">Nicotina (mg)</label>

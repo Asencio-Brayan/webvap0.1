@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export interface CartItem {
+  id: string;
   productId: number;
   name: string;
   brand: string;
@@ -17,9 +18,9 @@ export type DeliveryCity = 'Lima' | 'Canete' | 'Chincha' | 'Ica' | 'Otras ciudad
 interface CartStore {
   items: CartItem[];
   deliveryCity: DeliveryCity;
-  addItem: (item: Omit<CartItem, 'quantity'>) => void;
-  removeItem: (productId: number) => void;
-  updateQuantity: (productId: number, quantity: number) => void;
+  addItem: (item: Omit<CartItem, 'quantity' | 'id'>) => void;
+  removeItem: (id: string) => void;
+  updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
   setDeliveryCity: (city: DeliveryCity) => void;
   getSubtotal: () => number;
@@ -27,8 +28,6 @@ interface CartStore {
   getTotal: () => number;
   getItemCount: () => number;
 }
-
-
 
 export const useCartStore = create<CartStore>()(
   persist(
@@ -38,32 +37,33 @@ export const useCartStore = create<CartStore>()(
 
       addItem: (item) => {
         const { items } = get();
-        const existing = items.find((i) => i.productId === item.productId);
+        const cartItemId = `${item.productId}-${item.flavor}`;
+        const existing = items.find((i) => i.id === cartItemId);
         if (existing) {
           set({
             items: items.map((i) =>
-              i.productId === item.productId
+              i.id === cartItemId
                 ? { ...i, quantity: i.quantity + 1 }
                 : i
             ),
           });
         } else {
-          set({ items: [...items, { ...item, quantity: 1 }] });
+          set({ items: [...items, { ...item, id: cartItemId, quantity: 1 }] });
         }
       },
 
-      removeItem: (productId) => {
-        set({ items: get().items.filter((i) => i.productId !== productId) });
+      removeItem: (id) => {
+        set({ items: get().items.filter((i) => i.id !== id) });
       },
 
-      updateQuantity: (productId, quantity) => {
+      updateQuantity: (id, quantity) => {
         if (quantity <= 0) {
-          get().removeItem(productId);
+          get().removeItem(id);
           return;
         }
         set({
           items: get().items.map((i) =>
-            i.productId === productId ? { ...i, quantity } : i
+            i.id === id ? { ...i, quantity } : i
           ),
         });
       },

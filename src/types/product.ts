@@ -7,6 +7,7 @@ export interface Product {
   category: ProductCategory;
   price: number;
   flavor: string;
+  flavors?: string[];
   nicotine?: number;
   stock: number;
   featured: boolean;

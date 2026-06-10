@@ -60,9 +60,9 @@ export default function CheckoutPage() {
   }
 
   const generateWhatsAppMessage = (): string => {
-    const itemsText = items.map((item, i) =>
-      `${i + 1}. ${item.name} x${item.quantity} - S/ ${item.price * item.quantity}`
-    ).join('\n')
+    const itemsText = items.map((item) =>
+      `• ${item.name}%0ASabor: ${item.flavor}%0ACantidad: ${item.quantity}%0APrecio: S/ ${item.price * item.quantity}`
+    ).join('%0A%0A')
 
     return `*NUEVO PEDIDO - AURAVAPES*%0A%0A` +
       `*Datos del Cliente:*%0A` +

@@ -313,7 +313,9 @@ export default function AdminPedidosPage() {
                       <img src={item.image} alt={item.name} className="h-10 w-10 rounded-lg object-cover" />
                       <div className="flex-1">
                         <p className="text-sm text-white">{item.name}</p>
-                        <p className="text-xs text-white/50">{item.quantity} x S/ {item.price}</p>
+                        <p className="text-xs text-white/50">
+                          {item.flavor ? `Sabor: ${item.flavor} | ` : ''}{item.quantity} x S/ {item.price}
+                        </p>
                       </div>
                       <span className="font-mono text-sm text-white">S/ {item.price * item.quantity}</span>
                     </div>
@@ -495,7 +497,9 @@ export default function AdminPedidosPage() {
                       <img src={item.image} alt={item.name} className="h-12 w-12 rounded-lg object-cover" />
                       <div className="flex-1">
                         <p className="text-sm text-white font-medium">{item.name}</p>
-                        <p className="text-xs text-white/50">{item.quantity} x S/ {item.price}</p>
+                        <p className="text-xs text-white/50">
+                          {item.flavor ? `Sabor: ${item.flavor} | ` : ''}{item.quantity} x S/ {item.price}
+                        </p>
                       </div>
                       <div className="text-right mr-4">
                         <p className="text-sm font-mono text-[#7C9A6B]">S/ {item.price * item.quantity}</p>

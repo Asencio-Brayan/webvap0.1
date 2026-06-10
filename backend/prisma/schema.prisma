@@ -21,6 +21,7 @@ model Product {
   category    String
   price       Float
   flavor      String
+  flavors     String[] @default([])
   nicotine    Int?
   stock       Int
   featured    Boolean  @default(false)

@@ -15,6 +15,8 @@ export default function ProductoDetailPage() {
   const [quantity, setQuantity] = useState(1)
   const [added, setAdded] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [selectedFlavor, setSelectedFlavor] = useState<string>('')
+  const [flavorError, setFlavorError] = useState(false)
 
   useEffect(() => {
     const load = async () => {
@@ -24,6 +26,8 @@ export default function ProductoDetailPage() {
       if (!p) { navigate('/catalogo'); return }
       setProduct(p)
       setQuantity(1)
+      setSelectedFlavor('')
+      setFlavorError(false)
 
       const all = await productRepository.getProductsByCategory(p.category)
       setRelated(all.filter((r) => r.id !== p.id).slice(0, 4))
@@ -41,20 +45,38 @@ export default function ProductoDetailPage() {
   }
 
   const handleAdd = () => {
+    const hasMultipleFlavors = product.flavors && product.flavors.length > 0;
+    const finalFlavor = hasMultipleFlavors ? selectedFlavor : product.flavor;
+
+    if (hasMultipleFlavors && !selectedFlavor) {
+      setFlavorError(true);
+      return;
+    }
+
+    setFlavorError(false);
     addItem({
       productId: product.id,
       name: product.name,
       brand: product.brand,
       price: product.price,
       image: product.image,
-      flavor: product.flavor,
+      flavor: finalFlavor,
       nicotine: product.nicotine ? `${product.nicotine}mg` : undefined,
     })
+    
     // Update quantity if more than 1
     if (quantity > 1) {
       const cartStore = useCartStore.getState()
-      cartStore.updateQuantity(product.id, quantity)
+      const cartItemId = `${product.id}-${finalFlavor}`;
+      
+      // Get current quantity in store for this item (if it existed before, addItem added 1)
+      const currentItem = cartStore.items.find(i => i.id === cartItemId);
+      if (currentItem) {
+        // Just add the additional quantity (quantity - 1 because addItem already added 1)
+        cartStore.updateQuantity(cartItemId, currentItem.quantity + quantity - 1);
+      }
     }
+    
     setAdded(true)
     setTimeout(() => setAdded(false), 1500)
   }
@@ -119,7 +141,26 @@ export default function ProductoDetailPage() {
             <div className="mt-6 grid grid-cols-2 gap-3">
               <div>
                 <p className="text-xs font-medium uppercase tracking-wider text-white/40">Sabor</p>
-                <p className="mt-1 text-sm text-white">{product.flavor}</p>
+                {product.flavors && product.flavors.length > 0 ? (
+                  <div className="mt-1">
+                    <select
+                      value={selectedFlavor}
+                      onChange={(e) => {
+                        setSelectedFlavor(e.target.value);
+                        setFlavorError(false);
+                      }}
+                      className={`w-full rounded-lg border bg-[#1A1A1A] px-3 py-2 text-sm text-white outline-none focus:border-[#7C9A6B] ${flavorError ? 'border-red-500' : 'border-white/10'}`}
+                    >
+                      <option value="">Seleccionar sabor ▼</option>
+                      {product.flavors.map(f => (
+                        <option key={f} value={f}>{f}</option>
+                      ))}
+                    </select>
+                    {flavorError && <p className="mt-1 text-xs text-red-400">Selecciona un sabor obligatorio</p>}
+                  </div>
+                ) : (
+                  <p className="mt-1 text-sm text-white">{product.flavor}</p>
+                )}
               </div>
               {product.nicotine !== undefined && (
                 <div>

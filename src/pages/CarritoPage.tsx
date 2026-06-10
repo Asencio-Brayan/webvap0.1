@@ -43,10 +43,10 @@ export default function CarritoPage() {
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[65%_35%]">
             {/* Items */}
             <div>
-              <div className="space-y-4">
+              <div className="mt-5 space-y-3">
                 {items.map((item) => (
                   <div
-                    key={item.productId}
+                    key={item.id}
                     className="flex gap-4 rounded-2xl bg-[#141414] p-5 md:gap-6 md:p-6"
                   >
                     <img
@@ -66,14 +66,14 @@ export default function CarritoPage() {
                       <div className="mt-3 flex items-center justify-between gap-4 md:mt-0">
                         <div className="flex items-center gap-1">
                           <button
-                            onClick={() => updateQuantity(item.productId, item.quantity - 1)}
+                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
                             className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#1A1A1A] text-white/70 hover:text-white"
                           >
                             <Minus className="h-3 w-3" />
                           </button>
                           <span className="w-8 text-center text-sm text-white">{item.quantity}</span>
                           <button
-                            onClick={() => updateQuantity(item.productId, item.quantity + 1)}
+                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
                             className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#1A1A1A] text-white/70 hover:text-white"
                           >
                             <Plus className="h-3 w-3" />
@@ -85,7 +85,7 @@ export default function CarritoPage() {
                             S/ {item.price * item.quantity}
                           </p>
                           <button
-                            onClick={() => removeItem(item.productId)}
+                            onClick={() => removeItem(item.id)}
                             className="text-white/30 transition-colors hover:text-red-400"
                           >
                             <X className="h-5 w-5" />
