@@ -53,7 +53,7 @@ export default function Navbar() {
             to="/"
             className="absolute left-1/2 -translate-x-1/2 text-xs font-medium tracking-[0.12em] text-white md:static md:translate-x-0"
           >
-            VAPEQUEST
+            AURAVAPES
           </Link>
 
           <div className="hidden items-center gap-8 md:flex">

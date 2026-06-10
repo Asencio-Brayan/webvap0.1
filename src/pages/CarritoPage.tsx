@@ -117,7 +117,7 @@ export default function CarritoPage() {
                   </div>
 
                   <div className="flex items-center justify-between text-[15px]">
-                    <span className="text-white/70">Delivery</span>
+                    <span className="text-white/70">Entrega</span>
                     <select
                       value={deliveryCity}
                       onChange={(e) => setDeliveryCity(e.target.value as 'Lima' | 'Canete' | 'Chincha' | 'Ica')}

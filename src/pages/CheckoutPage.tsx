@@ -4,11 +4,12 @@ import { AlertTriangle } from 'lucide-react'
 import { useCartStore } from '@/stores/cartStore'
 import { orderRepository } from '@/repositories/orderRepository'
 const cities = [
-  { name: 'Lima' as const, cost: 10 },
-  { name: 'Canete' as const, cost: 15 },
-  { name: 'Chincha' as const, cost: 18 },
-  { name: 'Ica' as const, cost: 20 },
-]
+  { name: 'Lima', label: 'Lima' },
+  { name: 'Canete', label: 'Cañete' },
+  { name: 'Chincha', label: 'Chincha' },
+  { name: 'Ica', label: 'Ica' },
+  { name: 'Otras ciudades', label: 'Otras ciudades (envío por agencia)' },
+] as const
 
 const paymentMethods = [
   { value: 'yape', label: 'Yape' },
@@ -17,7 +18,7 @@ const paymentMethods = [
   { value: 'contraentrega', label: 'Contraentrega' },
 ]
 
-const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '51950332871'
+const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '51903389999'
 
 interface FormErrors {
   [key: string]: string
@@ -63,20 +64,21 @@ export default function CheckoutPage() {
       `${i + 1}. ${item.name} x${item.quantity} - S/ ${item.price * item.quantity}`
     ).join('\n')
 
-    return `*NUEVO PEDIDO - VAPEQUEST*%0A%0A` +
+    return `*NUEVO PEDIDO - AURAVAPES*%0A%0A` +
       `*Datos del Cliente:*%0A` +
       `Nombre: ${form.fullName}%0A` +
       `DNI: ${form.dni}%0A` +
       `Celular: ${form.phone}%0A%0A` +
       `*Datos de Entrega:*%0A` +
+      `Método de entrega: ${form.city === 'Otras ciudades' ? 'Envío por agencia' : 'Entrega coordinada'}%0A` +
       `Ciudad: ${form.city}%0A` +
-      `Distrito: ${form.district}%0A` +
-      `Direccion: ${form.address}%0A` +
+      `Distrito/Punto: ${form.district}%0A` +
+      `Detalle: ${form.address}%0A` +
       `Referencia: ${form.reference || 'N/A'}%0A%0A` +
       `*Productos:*%0A${itemsText}%0A%0A` +
       `*Resumen:*%0A` +
       `Subtotal: S/ ${getSubtotal()}%0A` +
-      `Delivery (${form.city}): S/ ${getDeliveryCost()}%0A` +
+      `Entrega (${form.city}): ${form.city === 'Otras ciudades' ? 'Coordinado con agencia' : 'Sin costo adicional'}%0A` +
       `*Total: S/ ${getTotal()}*%0A%0A` +
       `*Pago:* ${form.paymentMethod}%0A%0A` +
       `*Confirmo que soy mayor de 18 anos.*%0A` +
@@ -92,7 +94,7 @@ export default function CheckoutPage() {
       fullName: form.fullName,
       dni: form.dni,
       phone: form.phone,
-      city: form.city as 'Lima' | 'Canete' | 'Chincha' | 'Ica',
+      city: form.city as any,
       district: form.district,
       address: form.address,
       reference: form.reference,
@@ -192,31 +194,31 @@ export default function CheckoutPage() {
                     value={form.city}
                     onChange={(e) => {
                       handleChange('city', e.target.value)
-                      setDeliveryCity(e.target.value as 'Lima' | 'Canete' | 'Chincha' | 'Ica')
+                      setDeliveryCity(e.target.value as any)
                     }}
                     className="mt-1.5 w-full rounded-xl border border-white/10 bg-[#1A1A1A] px-4 py-3 text-sm text-white outline-none focus:border-[#7C9A6B]"
                   >
-                    {cities.map((c) => <option key={c.name} value={c.name}>{c.name}</option>)}
+                    {cities.map((c) => <option key={c.name} value={c.name}>{c.label}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="text-sm text-white/70">Distrito / Zona *</label>
+                  <label className="text-sm text-white/70">Punto de encuentro seguro o distrito *</label>
                   <input
                     type="text"
                     value={form.district}
                     onChange={(e) => handleChange('district', e.target.value)}
-                    placeholder="Ej: Miraflores, San Isidro..."
+                    placeholder="Ej: Parque Kennedy, CC Rambla..."
                     className={`mt-1.5 w-full rounded-xl border bg-[#1A1A1A] px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none focus:border-[#7C9A6B] ${errors.district ? 'border-red-500' : 'border-white/10'}`}
                   />
                   {errors.district && <p className="mt-1 text-xs text-red-400">{errors.district}</p>}
                 </div>
                 <div>
-                  <label className="text-sm text-white/70">Direccion *</label>
+                  <label className="text-sm text-white/70">Zona aproximada o referencia *</label>
                   <input
                     type="text"
                     value={form.address}
                     onChange={(e) => handleChange('address', e.target.value)}
-                    placeholder="Calle, numero, interior..."
+                    placeholder="Ej: Plaza de Armas, Centro Comercial, Plaza Vea, Boulevard..."
                     className={`mt-1.5 w-full rounded-xl border bg-[#1A1A1A] px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none focus:border-[#7C9A6B] ${errors.address ? 'border-red-500' : 'border-white/10'}`}
                   />
                   {errors.address && <p className="mt-1 text-xs text-red-400">{errors.address}</p>}
@@ -327,9 +329,13 @@ export default function CheckoutPage() {
                   <span className="text-white/70">Subtotal</span>
                   <span className="text-white">S/ {getSubtotal()}</span>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-white/70">Delivery ({deliveryCity})</span>
-                  <span className="text-white">S/ {getDeliveryCost()}</span>
+                <div className="flex justify-between text-sm items-center gap-4">
+                  <span className="text-white/70 whitespace-nowrap">Entrega</span>
+                  <span className="text-white text-right leading-tight text-[13px] md:text-sm">
+                    {deliveryCity === 'Otras ciudades' 
+                      ? 'El costo de envío será coordinado según la agencia seleccionada' 
+                      : 'Entrega coordinada sin costo adicional'}
+                  </span>
                 </div>
               </div>
 
@@ -340,8 +346,8 @@ export default function CheckoutPage() {
                 <span className="font-mono text-2xl text-[#7C9A6B]">S/ {getTotal()}</span>
               </div>
 
-              <p className="mt-5 text-xs text-white/50">
-                Tu pedido sera confirmado via WhatsApp. Delivery estimado segun tu zona seleccionada.
+              <p className="mt-5 text-[13px] text-white/70">
+                Nos comunicaremos contigo por WhatsApp para coordinar la entrega o envío de tu pedido.
               </p>
 
               <div className="mt-4 flex items-start gap-2 rounded-lg border border-[#D4A853]/20 bg-[#D4A853]/10 p-3">

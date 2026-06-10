@@ -8,7 +8,7 @@ const zones = [
 ]
 
 export default function ContactoPage() {
-  const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '51950332871'
+  const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '51903389999'
   const INSTAGRAM_URL = import.meta.env.VITE_INSTAGRAM_URL || ''
   const TIKTOK_URL = import.meta.env.VITE_TIKTOK_URL || ''
   const FACEBOOK_URL = import.meta.env.VITE_FACEBOOK_URL || ''
@@ -93,7 +93,7 @@ export default function ContactoPage() {
               </div>
               <div className="flex items-center gap-3">
                 <Mail className="h-5 w-5 shrink-0 text-[#7C9A6B]" />
-                <p className="text-[15px] text-white">info@vapequest.pe</p>
+                <p className="text-[15px] text-white">info@auravape.shop</p>
               </div>
               <div className="flex items-center gap-3">
                 <MapPin className="h-5 w-5 shrink-0 text-[#7C9A6B]" />
@@ -125,7 +125,7 @@ export default function ContactoPage() {
               ))}
             </div>
             <p className="mt-4 text-sm text-white/50">
-              El delivery se coordina via WhatsApp tras confirmar tu pedido.
+              La entrega se coordina vía WhatsApp tras confirmar tu pedido.
             </p>
           </div>
         </div>

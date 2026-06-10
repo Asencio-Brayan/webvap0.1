@@ -4,7 +4,7 @@ import { ChevronDown } from 'lucide-react'
 const tabs = [
   { id: 'privacidad', label: 'Privacidad' },
   { id: 'terminos', label: 'Terminos' },
-  { id: 'delivery', label: 'Delivery' },
+  { id: 'delivery', label: 'Entregas' },
   { id: 'cambios', label: 'Cambios' },
   { id: 'edad', label: 'Edad' },
 ]
@@ -14,9 +14,9 @@ const content: Record<string, { title: string; body: React.ReactNode }> = {
     title: 'Politica de Privacidad',
     body: (
       <>
-        <p>VapeQuest Peru recopila datos personales (nombre, DNI, direccion, telefono) unicamente para procesar pedidos y coordinar entregas.</p>
+        <p>AuraVapes recopila datos personales (nombre, DNI, direccion, telefono) unicamente para procesar pedidos y coordinar entregas.</p>
         <h4 className="mt-6 text-lg font-medium text-white">Uso de la informacion</h4>
-        <p className="mt-2">No compartimos informacion con terceros excepto repartidores de delivery. Los datos se almacenan de forma segura y se eliminan tras 12 meses de inactividad.</p>
+        <p className="mt-2">No compartimos informacion con terceros excepto encargados de entrega. Los datos se almacenan de forma segura y se eliminan tras 12 meses de inactividad.</p>
         <h4 className="mt-6 text-lg font-medium text-white">Derechos del usuario</h4>
         <p className="mt-2">El usuario puede solicitar la eliminacion de sus datos en cualquier momento contactandonos por WhatsApp o correo electronico.</p>
         <h4 className="mt-6 text-lg font-medium text-white">Cookies</h4>
@@ -32,14 +32,14 @@ const content: Record<string, { title: string; body: React.ReactNode }> = {
         <h4 className="mt-6 text-lg font-medium text-white">Precios y disponibilidad</h4>
         <p className="mt-2">Los precios pueden cambiar sin previo aviso. La disponibilidad de productos esta sujeta a stock existente.</p>
         <h4 className="mt-6 text-lg font-medium text-white">Responsabilidad</h4>
-        <p className="mt-2">VapeQuest Peru no se hace responsable por el uso indebido de los productos. La nicotina es una sustancia adictiva. Consulta a un profesional de salud antes de usar.</p>
+        <p className="mt-2">AuraVapes no se hace responsable por el uso indebido de los productos. La nicotina es una sustancia adictiva. Consulta a un profesional de salud antes de usar.</p>
         <h4 className="mt-6 text-lg font-medium text-white">Propiedad intelectual</h4>
-        <p className="mt-2">Todos los contenidos de este sitio son propiedad de VapeQuest Peru. Queda prohibida su reproduccion sin autorizacion.</p>
+        <p className="mt-2">Todos los contenidos de este sitio son propiedad de AuraVapes. Queda prohibida su reproduccion sin autorizacion.</p>
       </>
     ),
   },
   delivery: {
-    title: 'Politica de Delivery',
+    title: 'Política de Entregas',
     body: (
       <>
         <div className="overflow-x-auto">
@@ -70,7 +70,7 @@ const content: Record<string, { title: string; body: React.ReactNode }> = {
         <h4 className="mt-6 text-lg font-medium text-white">Horario de entrega</h4>
         <p className="mt-2">Lunes a Sabado, 10:00 AM - 8:00 PM. No realizamos entregas los domingos ni feriados.</p>
         <h4 className="mt-6 text-lg font-medium text-white">Verificacion de edad</h4>
-        <p className="mt-2">La edad del comprador sera verificada al momento de la entrega con DNI original. Si no se puede verificar la edad, el pedido sera cancelado sin reembolso del delivery.</p>
+        <p className="mt-2">La edad del comprador sera verificada al momento de la entrega con DNI original. Si no se puede verificar la edad, el pedido sera cancelado sin reembolso del costo de envío.</p>
       </>
     ),
   },

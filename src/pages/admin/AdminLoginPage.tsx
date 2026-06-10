@@ -54,7 +54,7 @@ export default function AdminLoginPage() {
       >
         <div className="text-center">
           <p className="text-xs font-medium tracking-[0.12em] text-white">
-            VAPEQUEST <span className="text-[#7C9A6B]">ADMIN</span>
+            AURAVAPES <span className="text-[#7C9A6B]">ADMIN</span>
           </p>
           <h1 className="mt-6 font-display text-2xl text-white md:text-[28px]">
             Panel de Administracion
@@ -73,7 +73,7 @@ export default function AdminLoginPage() {
           <div>
             <input
               type="email"
-              placeholder="admin@vapequest.pe"
+              placeholder="admin@auravape.shop"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-xl border border-white/10 bg-[#1A1A1A] px-4 py-3.5 text-sm text-white placeholder:text-white/30 outline-none focus:border-[#7C9A6B]"

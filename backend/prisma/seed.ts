@@ -13,7 +13,7 @@ const prisma = new PrismaClient({
 })
 
 async function main() {
-  const adminEmail = process.env.ADMIN_EMAIL || 'admin@vapequest.pe'
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin@auravape.shop'
   const adminPassword = process.env.ADMIN_PASSWORD || 'admin123'
   const existingAdmin = await prisma.adminUser.findUnique({
     where: { email: adminEmail },

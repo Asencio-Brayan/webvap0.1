@@ -177,7 +177,7 @@ export default function ProductoDetailPage() {
             <div className="mt-6 flex flex-wrap gap-5">
               {[
                 { icon: ShieldCheck, text: 'Mayores de 18' },
-                { icon: Truck, text: 'Delivery a tu zona' },
+                { icon: Truck, text: 'Entrega coordinada' },
                 { icon: Package, text: 'Producto sellado' },
               ].map(({ icon: Icon, text }) => (
                 <div key={text} className="flex items-center gap-2 text-white/50">

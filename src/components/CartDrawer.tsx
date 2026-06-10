@@ -118,7 +118,7 @@ export default function CartDrawer() {
                   <span className="text-white">S/ {getSubtotal()}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-white/70">Delivery</span>
+                  <span className="text-white/70">Entrega</span>
                   <select
                     value={deliveryCity}
                     onChange={(e) => setDeliveryCity(e.target.value as 'Lima' | 'Canete' | 'Chincha' | 'Ica')}

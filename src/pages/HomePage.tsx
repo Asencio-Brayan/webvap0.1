@@ -59,7 +59,7 @@ function HeroSection() {
         >
           <MapPin className="h-4 w-4 text-[#7C9A6B]" />
           <span className="text-xs font-medium uppercase tracking-[0.08em] text-[#7C9A6B]">
-            Delivery de Lima a Ica
+            Cobertura de entrega
           </span>
         </div>
 
@@ -67,14 +67,14 @@ function HeroSection() {
           className="mt-6 font-display text-4xl leading-[1.05] text-white md:text-6xl lg:text-[64px]"
           style={{ opacity: mounted ? 1 : 0, transform: mounted ? 'none' : 'translateY(30px)', transition: 'all 800ms cubic-bezier(0.22, 1, 0.36, 1) 100ms' }}
         >
-          Tu vape favorito,<br />directo a tu puerta
+          Descubre tu próximo<br />vape favorito
         </h1>
 
         <p
           className="mt-6 max-w-[560px] text-lg leading-relaxed text-white/70"
           style={{ opacity: mounted ? 1 : 0, transform: mounted ? 'none' : 'translateY(30px)', transition: 'all 800ms cubic-bezier(0.22, 1, 0.36, 1) 200ms' }}
         >
-          Entrega express de productos premium de vapeo en Lima, Canete, Chincha e Ica. Solo mayores de 18 anos.
+          Productos seleccionados, entregas coordinadas y atención personalizada en Lima, Cañete, Chincha e Ica.
         </p>
 
         <div
@@ -85,31 +85,17 @@ function HeroSection() {
             to="/catalogo"
             className="rounded-xl bg-[#7C9A6B] px-8 py-4 text-sm font-medium text-black transition-all hover:bg-[#6B8560] hover:scale-[1.02]"
           >
-            Ver Catalogo
+            Ver Catálogo
           </Link>
           <Link
             to="/checkout"
             className="rounded-xl border border-white/20 bg-transparent px-8 py-4 text-sm font-medium text-white transition-all hover:bg-white/5 hover:border-white/30"
           >
-            Hacer Pedido
+            Coordinar Compra
           </Link>
         </div>
 
-        <div
-          className="mt-12 flex flex-wrap gap-8"
-          style={{ opacity: mounted ? 1 : 0, transform: mounted ? 'none' : 'translateY(30px)', transition: 'all 800ms cubic-bezier(0.22, 1, 0.36, 1) 400ms' }}
-        >
-          {[
-            { icon: ShieldCheck, text: 'Mayores de 18' },
-            { icon: Truck, text: 'Delivery express' },
-            { icon: Clock, text: 'Lunes a Sabado' },
-          ].map(({ icon: Icon, text }) => (
-            <div key={text} className="flex items-center gap-2 text-white/60">
-              <Icon className="h-5 w-5" />
-              <span className="text-sm">{text}</span>
-            </div>
-          ))}
-        </div>
+
       </div>
 
       {/* Scroll indicator */}
@@ -122,19 +108,43 @@ function HeroSection() {
   )
 }
 
+/* ─── Trust Indicators Section ─── */
+function TrustIndicatorsSection() {
+  return (
+    <section className="bg-[#141414] py-12 border-b border-white/5">
+      <div className="mx-auto max-w-7xl px-5 md:px-12">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          {[
+            'Entregas coordinadas en Lima, Cañete, Chincha e Ica',
+            'Atención personalizada por WhatsApp',
+            'Productos seleccionados de calidad premium',
+          ].map((text, i) => (
+            <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#7C9A6B]/20">
+                <svg className="h-4 w-4 text-[#7C9A6B]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <p className="text-sm font-medium text-white/80">{text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 /* ─── Zonas Section ─── */
 const zones = [
-  { city: 'Lima', price: 10, eta: '2-4 horas' },
-  { city: 'Canete', price: 15, eta: '4-6 horas' },
-  { city: 'Chincha', price: 18, eta: '6-8 horas' },
-  { city: 'Ica', price: 20, eta: '8-12 horas' },
+  { city: 'Lima' },
+  { city: 'Canete' },
+  { city: 'Chincha' },
+  { city: 'Ica' },
 ]
 
 function ZonasSection() {
   return (
     <section className="bg-[#0A0A0A] py-16 md:py-28">
       <div className="mx-auto max-w-7xl px-5 md:px-12">
-        <h2 className="font-display text-3xl text-white md:text-5xl">Zonas de Delivery</h2>
+        <h2 className="font-display text-3xl text-white md:text-5xl">Zonas de Entrega</h2>
         <p className="mt-2 text-lg text-white/70">Entregamos en estas zonas de la costa central</p>
 
         <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -148,10 +158,31 @@ function ZonasSection() {
             >
               <MapPin className="h-8 w-8 text-[#7C9A6B]" />
               <h3 className="mt-4 text-xl font-medium text-white">{zone.city}</h3>
-              <p className="mt-2 font-mono text-base text-[#7C9A6B]">Delivery: S/ {zone.price}</p>
-              <p className="mt-1 text-sm text-white/50">Entrega: {zone.eta}</p>
+              <p className="mt-2 text-sm text-[#7C9A6B]">Entrega coordinada</p>
+              <p className="mt-1 text-sm text-white/70">Punto de encuentro seguro</p>
             </div>
           ))}
+        </div>
+
+        <div className="mt-20">
+          <h3 className="font-display text-2xl text-white md:text-3xl text-center">¿Cómo funciona la entrega?</h3>
+          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { num: 1, title: 'Realiza tu pedido.' },
+              { num: 2, title: 'Confirmamos disponibilidad por WhatsApp.' },
+              { num: 3, title: 'Coordinamos un punto de encuentro seguro.' },
+              { num: 4, title: 'Recibes tu producto.' },
+            ].map((step, i) => (
+               <div key={i} className="flex flex-col items-center text-center p-6 rounded-2xl bg-[#141414] border border-white/5">
+                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#7C9A6B]/20 text-[#7C9A6B] font-bold mb-4">{step.num}</div>
+                 <p className="text-[15px] text-white/80">{step.title}</p>
+               </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-16 rounded-xl bg-[#141414] border border-white/10 p-6 text-center">
+          <p className="text-[15px] text-white/70">Para otras ciudades realizamos envíos mediante agencias de transporte autorizadas.</p>
         </div>
       </div>
     </section>
@@ -190,8 +221,8 @@ function FeaturedSection() {
 const steps = [
   { num: 1, icon: Search, title: 'Elige tus productos', desc: 'Navega nuestro catalogo y selecciona tus vapes favoritos' },
   { num: 2, icon: ShoppingCart, title: 'Agrega al carrito', desc: 'Revisa tu seleccion y elige la cantidad deseada' },
-  { num: 3, icon: MapPin, title: 'Selecciona tu zona', desc: 'Indica tu ciudad y direccion para el delivery' },
-  { num: 4, icon: MessageCircle, title: 'Recibe tu pedido', desc: 'Confirma por WhatsApp y recibe en la puerta de tu casa' },
+  { num: 3, icon: MapPin, title: 'Selecciona tu zona', desc: 'Indica tu ciudad para la cobertura de entrega' },
+  { num: 4, icon: MessageCircle, title: 'Recibe tu pedido', desc: 'Confirma por WhatsApp y coordinaremos el punto de encuentro' },
 ]
 
 function ComoComprarSection() {
@@ -263,6 +294,7 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
+      <TrustIndicatorsSection />
       <ZonasSection />
       <FeaturedSection />
       <ComoComprarSection />

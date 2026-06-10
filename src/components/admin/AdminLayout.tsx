@@ -44,7 +44,7 @@ export default function AdminLayout() {
       >
         <div className="flex items-center justify-between p-6">
           <div>
-            <span className="text-xs font-medium tracking-[0.12em] text-white">VAPEQUEST</span>
+            <span className="text-xs font-medium tracking-[0.12em] text-white">AURAVAPES</span>
             <span className="ml-2 text-xs font-medium text-[#7C9A6B]">ADMIN</span>
           </div>
           <button onClick={() => setSidebarOpen(false)} className="text-white/60 lg:hidden">
@@ -90,7 +90,7 @@ export default function AdminLayout() {
           <button onClick={() => setSidebarOpen(true)} className="text-white/60">
             <Menu className="h-5 w-5" />
           </button>
-          <span className="ml-4 text-xs font-medium tracking-[0.12em] text-white">VAPEQUEST</span>
+          <span className="ml-4 text-xs font-medium tracking-[0.12em] text-white">AURAVAPES</span>
         </div>
         <div className="p-6 lg:p-8">
           <Outlet />

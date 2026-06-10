@@ -333,7 +333,7 @@ export default function AdminPedidosPage() {
                   <span className="text-white">S/ {selectedOrder.subtotal}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-white/50">Delivery</span>
+                  <span className="text-white/50">Entrega</span>
                   <span className="text-white">S/ {selectedOrder.deliveryCost}</span>
                 </div>
                 <div className="flex justify-between text-lg font-medium">

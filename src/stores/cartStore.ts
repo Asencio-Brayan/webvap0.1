@@ -12,26 +12,23 @@ export interface CartItem {
   quantity: number;
 }
 
+export type DeliveryCity = 'Lima' | 'Canete' | 'Chincha' | 'Ica' | 'Otras ciudades';
+
 interface CartStore {
   items: CartItem[];
-  deliveryCity: 'Lima' | 'Canete' | 'Chincha' | 'Ica';
+  deliveryCity: DeliveryCity;
   addItem: (item: Omit<CartItem, 'quantity'>) => void;
   removeItem: (productId: number) => void;
   updateQuantity: (productId: number, quantity: number) => void;
   clearCart: () => void;
-  setDeliveryCity: (city: 'Lima' | 'Canete' | 'Chincha' | 'Ica') => void;
+  setDeliveryCity: (city: DeliveryCity) => void;
   getSubtotal: () => number;
   getDeliveryCost: () => number;
   getTotal: () => number;
   getItemCount: () => number;
 }
 
-const deliveryCosts: Record<string, number> = {
-  Lima: 10,
-  Canete: 15,
-  Chincha: 18,
-  Ica: 20,
-};
+
 
 export const useCartStore = create<CartStore>()(
   persist(
@@ -79,9 +76,7 @@ export const useCartStore = create<CartStore>()(
         get().items.reduce((sum, item) => sum + item.price * item.quantity, 0),
 
       getDeliveryCost: () => {
-        const { items, deliveryCity } = get();
-        if (items.length === 0) return 0;
-        return deliveryCosts[deliveryCity] || 10;
+        return 0;
       },
 
       getTotal: () => {
@@ -93,7 +88,7 @@ export const useCartStore = create<CartStore>()(
         get().items.reduce((sum, item) => sum + item.quantity, 0),
     }),
     {
-      name: 'vapequest-cart',
+      name: 'auravapes-cart',
       partialize: (state) => ({
         items: state.items,
         deliveryCity: state.deliveryCity,

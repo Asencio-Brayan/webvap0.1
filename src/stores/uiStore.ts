@@ -36,7 +36,7 @@ export const useUIStore = create<UIStore>()(
       dismissAgeBanner: () => set({ ageBannerDismissed: true }),
     }),
     {
-      name: 'vapequest-ui',
+      name: 'auravapes-ui',
       partialize: (state) => ({
         isAgeVerified: state.isAgeVerified,
       }),

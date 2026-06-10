@@ -27,9 +27,9 @@ export default function Footer() {
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div>
-            <p className="text-xs font-medium tracking-[0.12em] text-white">VAPEQUEST</p>
+            <p className="text-xs font-medium tracking-[0.12em] text-white">AURAVAPES</p>
             <p className="mt-4 text-[15px] leading-relaxed text-white/70">
-              Delivery premium de productos de vapeo en Lima, Canete, Chincha e Ica.
+              Productos seleccionados, entregas coordinadas y atención personalizada.
             </p>
             <span className="mt-4 inline-block rounded-full border border-[#D4A853] px-4 py-1.5 text-xs text-[#D4A853]">
               SOLO MAYORES DE 18
@@ -52,7 +52,7 @@ export default function Footer() {
 
           {/* Delivery Zones */}
           <div>
-            <p className="text-xs font-medium tracking-[0.08em] text-white/40">ZONAS DE REPARTO</p>
+            <p className="text-xs font-medium tracking-[0.08em] text-white/40">ZONAS DE ENTREGA</p>
             <ul className="mt-4 space-y-2.5">
               {zones.map((zone) => (
                 <li key={zone.city} className="text-[15px] text-white/70">
@@ -68,7 +68,7 @@ export default function Footer() {
             <ul className="mt-4 space-y-3">
               <li className="flex items-center gap-2.5 text-[15px] text-white/70">
                 <MessageCircle className="h-4 w-4 shrink-0 text-[#7C9A6B]" />
-                +51 950 332 871
+                +51 903 389 999
               </li>
               <li className="flex items-center gap-2.5 text-[15px] text-white/70">
                 <Clock className="h-4 w-4 shrink-0 text-[#7C9A6B]" />
@@ -104,7 +104,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 border-t border-white/10 pt-6">
           <div className="flex flex-col items-center justify-between gap-3 text-center text-[13px] text-white/40 md:flex-row">
-            <p>&copy; 2025 VapeQuest Peru. Todos los derechos reservados.</p>
+            <p>&copy; 2025 AuraVapes. Todos los derechos reservados.</p>
             <p>Ventas exclusivas para mayores de 18 anos.</p>
           </div>
         </div>
