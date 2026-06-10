@@ -47,19 +47,20 @@ const content: Record<string, { title: string; body: React.ReactNode }> = {
             <thead>
               <tr className="border-b border-white/10">
                 <th className="py-3 text-left text-white/60">Zona</th>
-                <th className="py-3 text-left text-white/60">Tiempo estimado</th>
+                <th className="py-3 text-left text-white/60">Modalidad</th>
               </tr>
             </thead>
             <tbody>
               {[
-                { zone: 'Lima', time: '2-4 horas' },
-                { zone: 'Cañete', time: '4-6 horas' },
-                { zone: 'Chincha', time: '6-8 horas' },
-                { zone: 'Ica', time: '8-12 horas' },
+                { zone: 'Lima', type: 'Entrega coordinada' },
+                { zone: 'Cañete', type: 'Entrega coordinada' },
+                { zone: 'Chincha', type: 'Entrega coordinada' },
+                { zone: 'Ica', type: 'Entrega coordinada' },
+                { zone: 'Otras ciudades', type: 'Envío por agencia' },
               ].map((row) => (
                 <tr key={row.zone} className="border-b border-white/5">
                   <td className="py-3 text-white">{row.zone}</td>
-                  <td className="py-3 text-[#7C9A6B]">{row.time}</td>
+                  <td className="py-3 text-[#7C9A6B]">{row.type}</td>
                 </tr>
               ))}
             </tbody>
@@ -68,7 +69,7 @@ const content: Record<string, { title: string; body: React.ReactNode }> = {
         <h4 className="mt-6 text-lg font-medium text-white">Horario de entrega</h4>
         <p className="mt-2">Lunes a Sabado, 10:00 AM - 8:00 PM. No realizamos entregas los domingos ni feriados.</p>
         <h4 className="mt-6 text-lg font-medium text-white">Verificacion de edad</h4>
-        <p className="mt-2">La edad del comprador sera verificada al momento de la entrega con DNI original. Si no se puede verificar la edad, el pedido sera cancelado sin reembolso del costo de envío.</p>
+        <p className="mt-2">La edad del comprador sera verificada al momento de la entrega con DNI original. Si no se puede verificar la edad, el pedido sera cancelado.</p>
       </>
     ),
   },

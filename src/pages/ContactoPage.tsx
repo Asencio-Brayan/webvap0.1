@@ -1,10 +1,11 @@
 import { MessageCircle, Clock, MapPin, Mail, Facebook } from 'lucide-react'
 
 const zones = [
-  { city: 'Lima', price: 10, eta: '2-4 horas' },
-  { city: 'Canete', price: 15, eta: '4-6 horas' },
-  { city: 'Chincha', price: 18, eta: '6-8 horas' },
-  { city: 'Ica', price: 20, eta: '8-12 horas' },
+  { city: 'Lima', type: 'Entrega coordinada', detail: 'Punto de encuentro seguro' },
+  { city: 'Cañete', type: 'Entrega coordinada', detail: 'Punto de encuentro seguro' },
+  { city: 'Chincha', type: 'Entrega coordinada', detail: 'Punto de encuentro seguro' },
+  { city: 'Ica', type: 'Entrega coordinada', detail: 'Punto de encuentro seguro' },
+  { city: 'Otras ciudades', type: 'Envío por agencia', detail: 'Costo coordinado según destino' },
 ]
 
 export default function ContactoPage() {
@@ -108,7 +109,7 @@ export default function ContactoPage() {
 
           {/* Delivery zones */}
           <div>
-            <h2 className="font-display text-3xl text-white">Zonas de Reparto</h2>
+            <h2 className="font-display text-3xl text-white">Ciudades con Cobertura</h2>
             <div className="mt-6 space-y-3">
               {zones.map((zone) => (
                 <div
@@ -118,14 +119,16 @@ export default function ContactoPage() {
                   <MapPin className="h-6 w-6 shrink-0 text-[#7C9A6B]" />
                   <div className="flex-1">
                     <p className="text-lg font-medium text-white">{zone.city}</p>
-                    <p className="text-sm text-white/50">Entrega: {zone.eta}</p>
+                    <ul className="mt-1 space-y-1 text-sm text-white/50 list-inside list-disc">
+                      <li>{zone.type}</li>
+                      <li>{zone.detail}</li>
+                    </ul>
                   </div>
-                  <span className="font-mono text-lg text-[#7C9A6B]">S/ {zone.price}</span>
                 </div>
               ))}
             </div>
             <p className="mt-4 text-sm text-white/50">
-              La entrega se coordina vía WhatsApp tras confirmar tu pedido.
+              Nos comunicaremos contigo por WhatsApp para coordinar la entrega o el envío de tu pedido.
             </p>
           </div>
         </div>
