@@ -13,12 +13,7 @@ const statusConfig: Record<OrderStatus, { label: string; className: string; dot:
 
 const allStatuses: (OrderStatus | 'all')[] = ['all', 'pendiente', 'confirmado', 'en_camino', 'entregado', 'cancelado']
 
-const DELIVERY_COSTS: Record<string, number> = {
-  Lima: 10,
-  'Cañete': 15,
-  Chincha: 18,
-  Ica: 20
-}
+const CITIES = ['Lima', 'Cañete', 'Chincha', 'Ica', 'Otras ciudades']
 
 export default function AdminPedidosPage() {
   const { orders, products, updateOrderStatus, loadOrders, loadProducts, createOrder } = useAdminStore()
@@ -68,7 +63,7 @@ export default function AdminPedidosPage() {
 
   // Calculations
   const subtotal = form.items.reduce((sum, item) => sum + (item.price * item.quantity), 0)
-  const deliveryCost = DELIVERY_COSTS[form.city] || 10
+  const deliveryCost = 0
   const total = subtotal + deliveryCost
 
   const handleAddProduct = () => {
@@ -333,8 +328,8 @@ export default function AdminPedidosPage() {
                   <span className="text-white">S/ {selectedOrder.subtotal}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-white/50">Entrega</span>
-                  <span className="text-white">S/ {selectedOrder.deliveryCost}</span>
+                  <span className="text-white/50">Método de entrega</span>
+                  <span className="text-white">{selectedOrder.city === 'Otras ciudades' ? 'Coordinado' : 'Gratis'}</span>
                 </div>
                 <div className="flex justify-between text-lg font-medium">
                   <span className="text-white">Total</span>
@@ -415,8 +410,8 @@ export default function AdminPedidosPage() {
                       onChange={e => setForm(f => ({ ...f, city: e.target.value }))}
                       className="mt-1.5 w-full rounded-lg border border-white/10 bg-[#1A1A1A] px-4 py-2.5 text-sm text-white outline-none focus:border-[#7C9A6B]"
                     >
-                      {Object.keys(DELIVERY_COSTS).map(city => (
-                        <option key={city} value={city}>{city} (S/ {DELIVERY_COSTS[city]})</option>
+                      {CITIES.map(city => (
+                        <option key={city} value={city}>{city}</option>
                       ))}
                     </select>
                   </div>
@@ -565,8 +560,8 @@ export default function AdminPedidosPage() {
                         <span className="text-white font-mono">S/ {subtotal}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-white/50">Costo de envío ({form.city})</span>
-                        <span className="text-white font-mono">S/ {deliveryCost}</span>
+                        <span className="text-white/50">Método de entrega ({form.city})</span>
+                        <span className="text-[#7C9A6B] text-right">{form.city === 'Otras ciudades' ? 'Coordinado' : 'Gratis'}</span>
                       </div>
                       <div className="h-px bg-white/10 my-2" />
                       <div className="flex justify-between text-lg font-medium">

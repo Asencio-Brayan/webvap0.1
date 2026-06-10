@@ -47,21 +47,19 @@ const content: Record<string, { title: string; body: React.ReactNode }> = {
             <thead>
               <tr className="border-b border-white/10">
                 <th className="py-3 text-left text-white/60">Zona</th>
-                <th className="py-3 text-left text-white/60">Costo</th>
                 <th className="py-3 text-left text-white/60">Tiempo estimado</th>
               </tr>
             </thead>
             <tbody>
               {[
-                { zone: 'Lima', cost: 'S/ 10', time: '2-4 horas' },
-                { zone: 'Canete', cost: 'S/ 15', time: '4-6 horas' },
-                { zone: 'Chincha', cost: 'S/ 18', time: '6-8 horas' },
-                { zone: 'Ica', cost: 'S/ 20', time: '8-12 horas' },
+                { zone: 'Lima', time: '2-4 horas' },
+                { zone: 'Cañete', time: '4-6 horas' },
+                { zone: 'Chincha', time: '6-8 horas' },
+                { zone: 'Ica', time: '8-12 horas' },
               ].map((row) => (
                 <tr key={row.zone} className="border-b border-white/5">
                   <td className="py-3 text-white">{row.zone}</td>
-                  <td className="py-3 text-[#7C9A6B]">{row.cost}</td>
-                  <td className="py-3 text-white/70">{row.time}</td>
+                  <td className="py-3 text-[#7C9A6B]">{row.time}</td>
                 </tr>
               ))}
             </tbody>

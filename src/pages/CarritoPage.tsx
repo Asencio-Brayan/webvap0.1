@@ -4,15 +4,16 @@ import { ShoppingBag, Minus, Plus, X, ArrowLeft } from 'lucide-react'
 import { useCartStore } from '@/stores/cartStore'
 
 const cities = [
-  { name: 'Lima' as const, cost: 10 },
-  { name: 'Canete' as const, cost: 15 },
-  { name: 'Chincha' as const, cost: 18 },
-  { name: 'Ica' as const, cost: 20 },
+  { name: 'Lima', label: 'Lima' },
+  { name: 'Canete', label: 'Cañete' },
+  { name: 'Chincha', label: 'Chincha' },
+  { name: 'Ica', label: 'Ica' },
+  { name: 'Otras ciudades', label: 'Otras ciudades (envío por agencia)' },
 ]
 
 export default function CarritoPage() {
   const navigate = useNavigate()
-  const { items, updateQuantity, removeItem, deliveryCity, setDeliveryCity, getSubtotal, getDeliveryCost, getTotal, clearCart } = useCartStore()
+  const { items, updateQuantity, removeItem, deliveryCity, setDeliveryCity, getSubtotal, getTotal, clearCart } = useCartStore()
   const [showClearConfirm, setShowClearConfirm] = useState(false)
 
   return (
@@ -117,21 +118,16 @@ export default function CarritoPage() {
                   </div>
 
                   <div className="flex items-center justify-between text-[15px]">
-                    <span className="text-white/70">Entrega</span>
+                    <span className="text-white/70">Zona de entrega</span>
                     <select
                       value={deliveryCity}
-                      onChange={(e) => setDeliveryCity(e.target.value as 'Lima' | 'Canete' | 'Chincha' | 'Ica')}
+                      onChange={(e) => setDeliveryCity(e.target.value as 'Lima' | 'Canete' | 'Chincha' | 'Ica' | 'Otras ciudades')}
                       className="rounded-lg bg-[#1A1A1A] border border-white/10 px-3 py-2 text-sm text-white outline-none focus:border-[#7C9A6B]"
                     >
                       {cities.map((c) => (
-                        <option key={c.name} value={c.name}>{c.name} — S/ {c.cost}</option>
+                        <option key={c.name} value={c.name}>{c.label}</option>
                       ))}
                     </select>
-                  </div>
-
-                  <div className="flex justify-between text-sm">
-                    <span className="text-white/50">Costo de envio</span>
-                    <span className="text-white/70">S/ {getDeliveryCost()}</span>
                   </div>
                 </div>
 

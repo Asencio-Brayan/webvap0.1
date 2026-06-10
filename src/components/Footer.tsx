@@ -10,10 +10,10 @@ const quickLinks = [
 ]
 
 const zones = [
-  { city: 'Lima', price: 'S/ 10' },
-  { city: 'Canete', price: 'S/ 15' },
-  { city: 'Chincha', price: 'S/ 18' },
-  { city: 'Ica', price: 'S/ 20' },
+  { city: 'Lima' },
+  { city: 'Cañete' },
+  { city: 'Chincha' },
+  { city: 'Ica' },
 ]
 
 export default function Footer() {
@@ -56,7 +56,7 @@ export default function Footer() {
             <ul className="mt-4 space-y-2.5">
               {zones.map((zone) => (
                 <li key={zone.city} className="text-[15px] text-white/70">
-                  {zone.city} — <span className="text-[#7C9A6B]">{zone.price}</span>
+                  {zone.city}
                 </li>
               ))}
             </ul>

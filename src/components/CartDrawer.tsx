@@ -18,10 +18,11 @@ export default function CartDrawer() {
   }, [isCartOpen])
 
   const cities = [
-    { name: 'Lima' as const, cost: 10 },
-    { name: 'Canete' as const, cost: 15 },
-    { name: 'Chincha' as const, cost: 18 },
-    { name: 'Ica' as const, cost: 20 },
+    { name: 'Lima', label: 'Lima' },
+    { name: 'Canete', label: 'Cañete' },
+    { name: 'Chincha', label: 'Chincha' },
+    { name: 'Ica', label: 'Ica' },
+    { name: 'Otras ciudades', label: 'Otras ciudades (envío por agencia)' },
   ]
 
   return (
@@ -118,7 +119,7 @@ export default function CartDrawer() {
                   <span className="text-white">S/ {getSubtotal()}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-white/70">Entrega</span>
+                  <span className="text-white/70">Zona de entrega</span>
                   <select
                     value={deliveryCity}
                     onChange={(e) => setDeliveryCity(e.target.value as 'Lima' | 'Canete' | 'Chincha' | 'Ica')}
@@ -126,7 +127,7 @@ export default function CartDrawer() {
                   >
                     {cities.map((c) => (
                       <option key={c.name} value={c.name}>
-                        {c.name} — S/ {c.cost}
+                        {c.label}
                       </option>
                     ))}
                   </select>
