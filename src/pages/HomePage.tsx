@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { MapPin, ShieldCheck, Truck, Clock, Search, ShoppingCart, MessageCircle, AlertTriangle } from 'lucide-react'
+import { MapPin, Search, ShoppingCart, MessageCircle, AlertTriangle } from 'lucide-react'
 import ProductCard from '@/components/ProductCard'
 import { productRepository } from '@/repositories/productRepository'
 import type { Product } from '@/types/product'
