@@ -92,9 +92,16 @@ export const useAdminStore = create<AdminStore>((set, get) => ({
     // Remove empty id if present to let DB autoincrement
     const { id, ...productData } = product as any;
     
+    const now = new Date().toISOString();
+    const productToInsert = {
+      ...productData,
+      createdAt: now,
+      updatedAt: now
+    };
+    
     const { data, error } = await supabase
       .from('Product')
-      .insert([productData])
+      .insert([productToInsert])
       .select()
       .single();
 
