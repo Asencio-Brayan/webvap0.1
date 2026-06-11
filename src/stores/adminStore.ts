@@ -252,10 +252,31 @@ export const useAdminStore = create<AdminStore>((set, get) => ({
 
     // 2. Insert Items
     if (items && items.length > 0) {
-      const itemsToInsert = items.map((item: any) => ({
-        ...item,
-        orderId: orderResult.id
-      }));
+      const itemsToInsert = items.map((item: any) => {
+        let actualProductId = item.productId || item.id;
+        let actualFlavor = item.flavor;
+
+        if (typeof actualProductId === 'string' && actualProductId.includes('-')) {
+          const parts = actualProductId.split('-');
+          actualProductId = parseInt(parts[0], 10);
+          if (!actualFlavor && parts.length > 1) {
+            actualFlavor = parts.slice(1).join('-');
+          }
+        } else if (typeof actualProductId === 'string') {
+          actualProductId = parseInt(actualProductId, 10);
+        }
+
+        const { id, ...restItem } = item;
+
+        return {
+          ...restItem,
+          productId: actualProductId,
+          flavor: actualFlavor,
+          orderId: orderResult.id
+        };
+      });
+
+      console.log('ORDER ITEM PAYLOAD', itemsToInsert);
 
       const { error: itemsError } = await supabase
         .from('OrderItem')
