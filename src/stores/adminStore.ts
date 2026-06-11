@@ -225,9 +225,23 @@ export const useAdminStore = create<AdminStore>((set, get) => ({
     const { items, ...orderData } = data;
     
     // 1. Insert Order
+    const { fullName, ...restOrderData } = orderData as any;
+    const now = new Date().toISOString();
+
+    const orderToInsert = {
+      ...restOrderData,
+      id: `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      customerName: fullName,
+      status: 'pendiente',
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    console.log('ORDER PAYLOAD', orderToInsert);
+
     const { data: orderResult, error: orderError } = await supabase
       .from('Order')
-      .insert([orderData])
+      .insert([orderToInsert])
       .select()
       .single();
 

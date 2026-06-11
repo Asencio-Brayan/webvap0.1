@@ -7,10 +7,19 @@ export const orderRepository = {
     const { items, ...orderData } = data;
     
     // Convert undefined to null for Supabase if needed, or just insert
+    const { fullName, ...restOrderData } = orderData as any;
+    const now = new Date().toISOString();
+
     const orderToInsert = {
-      ...orderData,
+      ...restOrderData,
+      id: `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      customerName: fullName,
       status: 'pendiente' as OrderStatus,
+      createdAt: now,
+      updatedAt: now,
     };
+
+    console.log('ORDER PAYLOAD', orderToInsert);
 
     const { data: orderResult, error: orderError } = await supabase
       .from('Order')
