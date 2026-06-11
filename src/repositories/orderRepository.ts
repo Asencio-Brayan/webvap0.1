@@ -34,31 +34,38 @@ export const orderRepository = {
 
     // 2. Insert Items
     if (items && items.length > 0) {
+      console.log('RAW CART ITEMS', items);
+      
       const itemsToInsert = items.map((item: any) => {
-        let actualProductId = item.productId || item.id;
-        let actualFlavor = item.flavor;
+        let rawId = item.productId || item.id || '';
+        let actualFlavor = item.flavor || '';
 
-        if (typeof actualProductId === 'string' && actualProductId.includes('-')) {
-          const parts = actualProductId.split('-');
-          actualProductId = parseInt(parts[0], 10);
+        // If it's a composite string like "14-Sour APPLE"
+        if (typeof rawId === 'string' && rawId.includes('-')) {
+          const parts = rawId.split('-');
+          rawId = parts[0]; // just the number part
           if (!actualFlavor && parts.length > 1) {
             actualFlavor = parts.slice(1).join('-');
           }
-        } else if (typeof actualProductId === 'string') {
-          actualProductId = parseInt(actualProductId, 10);
         }
+
+        // Force integer
+        const actualProductId = parseInt(String(rawId).replace(/\D/g, ''), 10);
 
         const { id, ...restItem } = item;
 
-        return {
+        const payload = {
           ...restItem,
-          productId: actualProductId,
+          productId: isNaN(actualProductId) ? 0 : actualProductId,
           flavor: actualFlavor,
           orderId: orderResult.id
         };
+        
+        return payload;
       });
 
       console.log('ORDER ITEM PAYLOAD', itemsToInsert);
+      console.log('Type of productId:', typeof itemsToInsert[0]?.productId);
 
       const { error: itemsError } = await supabase
         .from('OrderItem')
