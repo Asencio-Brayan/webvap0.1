@@ -289,16 +289,61 @@ function WarningSection() {
   )
 }
 
+/* ─── Bloque SEO Home ─── */
+function SeoBlockSection() {
+  return (
+    <section className="bg-[#0A0A0A] py-12 border-b border-white/5">
+      <div className="mx-auto max-w-4xl px-5 text-center md:px-12">
+        <h2 className="font-display text-2xl text-white md:text-3xl">Vapes Desechables y Pods Originales en Perú</h2>
+        <p className="mt-4 text-sm leading-relaxed text-white/70 md:text-base">
+          En AuraVapes encontrarás dispositivos de marcas reconocidas como Smok, RELX, Snowplus, Vookbar y Life Pod. Realizamos entregas rápidas en Lima, Cañete, Chincha, Pisco e Ica con atención personalizada por WhatsApp.
+        </p>
+      </div>
+    </section>
+  )
+}
+
+/* ─── FAQ SEO Section ─── */
+function FaqSeoSection() {
+  return (
+    <section className="bg-[#141414] py-16 md:py-24 border-t border-white/5">
+      <div className="mx-auto max-w-4xl px-5 md:px-12">
+        <h2 className="font-display text-2xl text-white md:text-4xl text-center mb-10">Preguntas Frecuentes</h2>
+        <div className="space-y-6">
+          <div className="border border-white/10 rounded-xl p-6 bg-[#1A1A1A]">
+            <h3 className="text-lg font-medium text-white mb-2">¿Qué marcas venden?</h3>
+            <p className="text-sm text-white/70 leading-relaxed">Trabajamos con marcas originales y reconocidas internacionalmente como Smok, RELX, Snowplus, Vookbar y Life Pod para asegurar la mejor calidad.</p>
+          </div>
+          <div className="border border-white/10 rounded-xl p-6 bg-[#1A1A1A]">
+            <h3 className="text-lg font-medium text-white mb-2">¿Realizan envíos?</h3>
+            <p className="text-sm text-white/70 leading-relaxed">Sí, realizamos entregas rápidas en Lima, Cañete, Chincha, Pisco e Ica con atención personalizada por WhatsApp.</p>
+          </div>
+          <div className="border border-white/10 rounded-xl p-6 bg-[#1A1A1A]">
+            <h3 className="text-lg font-medium text-white mb-2">¿Qué tipos de dispositivos ofrecen?</h3>
+            <p className="text-sm text-white/70 leading-relaxed">Ofrecemos vapes desechables, pods y kits originales, brindando múltiples opciones para cada usuario.</p>
+          </div>
+          <div className="border border-white/10 rounded-xl p-6 bg-[#1A1A1A]">
+            <h3 className="text-lg font-medium text-white mb-2">¿Cómo realizar un pedido?</h3>
+            <p className="text-sm text-white/70 leading-relaxed">Solo debes agregar tus productos al carrito y coordinaremos todo el proceso de entrega de manera fácil y rápida.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 /* ─── Main Home Page ─── */
 export default function HomePage() {
   return (
     <>
       <HeroSection />
+      <SeoBlockSection />
       <TrustIndicatorsSection />
       <ZonasSection />
       <FeaturedSection />
       <ComoComprarSection />
       <WarningSection />
+      <FaqSeoSection />
     </>
   )
 }

@@ -115,6 +115,7 @@ export default function ProductoDetailPage() {
               <img
                 src={product.image}
                 alt={product.name}
+                loading="lazy"
                 className="h-full w-full object-cover"
               />
             </div>
@@ -235,6 +236,26 @@ export default function ProductoDetailPage() {
                 Este producto contiene nicotina. Venta exclusiva para mayores de 18 anos.
               </p>
             </div>
+            {/* Product Schema JSON-LD */}
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+              "@context": "https://schema.org/",
+              "@type": "Product",
+              "name": product.name,
+              "image": product.image,
+              "description": product.description,
+              "brand": {
+                "@type": "Brand",
+                "name": product.brand
+              },
+              "offers": {
+                "@type": "Offer",
+                "url": window.location.href,
+                "priceCurrency": "PEN",
+                "price": product.price,
+                "availability": product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+                "itemCondition": "https://schema.org/NewCondition"
+              }
+            }) }} />
           </div>
         </div>
       </div>
