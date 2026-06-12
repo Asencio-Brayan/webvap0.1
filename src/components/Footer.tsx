@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { MapPin, Clock, MessageCircle, Facebook } from 'lucide-react'
+import { MapPin, Clock, MessageCircle, Facebook, Mail } from 'lucide-react'
 
 const quickLinks = [
   { to: '/', label: 'Inicio' },
@@ -69,6 +69,12 @@ export default function Footer() {
               <li className="flex items-center gap-2.5 text-[15px] text-white/70">
                 <MessageCircle className="h-4 w-4 shrink-0 text-[#7C9A6B]" />
                 +51 903 389 999
+              </li>
+              <li className="flex items-center gap-2.5 text-[15px] text-white/70">
+                <Mail className="h-4 w-4 shrink-0 text-[#7C9A6B]" />
+                <a href="mailto:contacto@auravapes.shop" className="hover:text-white transition-colors">
+                  contacto@auravapes.shop
+                </a>
               </li>
               <li className="flex items-center gap-2.5 text-[15px] text-white/70">
                 <Clock className="h-4 w-4 shrink-0 text-[#7C9A6B]" />

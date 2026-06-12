@@ -92,10 +92,37 @@ export default function ContactoPage() {
                   <p className="text-sm text-white/50">Domingo: Cerrado</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
-                <Mail className="h-5 w-5 shrink-0 text-[#7C9A6B]" />
-                <p className="text-[15px] text-white">info@auravape.shop</p>
+              
+              <div className="flex items-start gap-3">
+                <Mail className="h-5 w-5 shrink-0 text-[#7C9A6B] mt-0.5" />
+                <div>
+                  <a href="mailto:contacto@auravapes.shop" className="text-[15px] text-white hover:text-white/80 transition-colors">
+                    contacto@auravapes.shop
+                  </a>
+                  <p className="text-sm text-white/50 mt-0.5">Atención general</p>
+                </div>
               </div>
+
+              <div className="flex items-start gap-3">
+                <Mail className="h-5 w-5 shrink-0 text-[#7C9A6B] mt-0.5" />
+                <div>
+                  <a href="mailto:ventas@auravapes.shop" className="text-[15px] text-white hover:text-white/80 transition-colors">
+                    ventas@auravapes.shop
+                  </a>
+                  <p className="text-sm text-white/50 mt-0.5">Pedidos y consultas de productos</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <Mail className="h-5 w-5 shrink-0 text-[#7C9A6B] mt-0.5" />
+                <div>
+                  <a href="mailto:soporte@auravapes.shop" className="text-[15px] text-white hover:text-white/80 transition-colors">
+                    soporte@auravapes.shop
+                  </a>
+                  <p className="text-sm text-white/50 mt-0.5">Ayuda y soporte al cliente</p>
+                </div>
+              </div>
+
               <div className="flex items-center gap-3">
                 <MapPin className="h-5 w-5 shrink-0 text-[#7C9A6B]" />
                 <p className="text-[15px] text-white">Lima, Peru</p>
