@@ -37,7 +37,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       <div className="relative aspect-[4/3] overflow-hidden">
         <img
           src={product.image}
-          alt={product.name}
+          alt={`Vape ${product.brand} ${product.name} en Perú`}
           loading="lazy"
           className="h-full w-full object-cover transition-transform duration-400 group-hover:scale-105"
         />

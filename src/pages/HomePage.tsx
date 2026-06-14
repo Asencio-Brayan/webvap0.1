@@ -137,6 +137,7 @@ const zones = [
   { city: 'Lima' },
   { city: 'Cañete' },
   { city: 'Chincha' },
+  { city: 'Pisco' },
   { city: 'Ica' },
 ]
 

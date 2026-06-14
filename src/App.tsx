@@ -12,11 +12,13 @@ import CarritoPage from '@/pages/CarritoPage'
 import CheckoutPage from '@/pages/CheckoutPage'
 import PoliticasPage from '@/pages/PoliticasPage'
 import ContactoPage from '@/pages/ContactoPage'
+import LocationPage from '@/pages/LocationPage'
 import AdminLoginPage from '@/pages/admin/AdminLoginPage'
 import AdminDashboardPage from '@/pages/admin/AdminDashboardPage'
 import AdminProductosPage from '@/pages/admin/AdminProductosPage'
 import AdminPedidosPage from '@/pages/admin/AdminPedidosPage'
 import AdminLayout from '@/components/admin/AdminLayout'
+import { useCanonical } from '@/hooks/useCanonical'
 
 function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -33,11 +35,14 @@ function AppLayout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  useCanonical();
+
   return (
     <Routes>
       <Route path="/" element={<AppLayout><HomePage /></AppLayout>} />
       <Route path="/catalogo" element={<AppLayout><CatalogoPage /></AppLayout>} />
       <Route path="/producto/:id" element={<AppLayout><ProductoDetailPage /></AppLayout>} />
+      <Route path="/vapes-:slug" element={<AppLayout><LocationPage /></AppLayout>} />
       <Route path="/carrito" element={<AppLayout><CarritoPage /></AppLayout>} />
       <Route path="/checkout" element={<AppLayout><CheckoutPage /></AppLayout>} />
       <Route path="/politicas" element={<AppLayout><PoliticasPage /></AppLayout>} />

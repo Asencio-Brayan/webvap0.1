@@ -114,7 +114,7 @@ export default function ProductoDetailPage() {
             <div className="aspect-[4/3] overflow-hidden rounded-2xl bg-[#141414]">
               <img
                 src={product.image}
-                alt={product.name}
+                alt={`Vape ${product.brand} ${product.name} en Perú`}
                 loading="lazy"
                 className="h-full w-full object-cover"
               />
