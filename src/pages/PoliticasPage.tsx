@@ -3,7 +3,7 @@ import { ChevronDown } from 'lucide-react'
 
 const tabs = [
   { id: 'privacidad', label: 'Privacidad' },
-  { id: 'terminos', label: 'Terminos' },
+  { id: 'terminos', label: 'Términos' },
   { id: 'delivery', label: 'Entregas' },
   { id: 'cambios', label: 'Cambios' },
   { id: 'edad', label: 'Edad' },
@@ -11,30 +11,30 @@ const tabs = [
 
 const content: Record<string, { title: string; body: React.ReactNode }> = {
   privacidad: {
-    title: 'Politica de Privacidad',
+    title: 'Política de privacidad',
     body: (
       <>
-        <p>AuraVapes recopila datos personales (nombre, DNI, direccion, telefono) unicamente para procesar pedidos y coordinar entregas.</p>
-        <h4 className="mt-6 text-lg font-medium text-white">Uso de la informacion</h4>
-        <p className="mt-2">No compartimos informacion con terceros excepto encargados de entrega. Los datos se almacenan de forma segura y se eliminan tras 12 meses de inactividad.</p>
+        <p>AuraVapes recopila datos personales (nombre, DNI, dirección, teléfono) únicamente para procesar pedidos y coordinar entregas.</p>
+        <h4 className="mt-6 text-lg font-medium text-white">Uso de la información</h4>
+        <p className="mt-2">No compartimos información con terceros excepto encargados de entrega. Los datos se almacenan de forma segura y se eliminan tras 12 meses de inactividad.</p>
         <h4 className="mt-6 text-lg font-medium text-white">Derechos del usuario</h4>
-        <p className="mt-2">El usuario puede solicitar la eliminacion de sus datos en cualquier momento contactandonos por WhatsApp o correo electronico.</p>
+        <p className="mt-2">El usuario puede solicitar la eliminación de sus datos en cualquier momento contactándonos por WhatsApp o correo electrónico.</p>
         <h4 className="mt-6 text-lg font-medium text-white">Cookies</h4>
         <p className="mt-2">Utilizamos cookies esenciales para el funcionamiento del carrito de compras. No utilizamos cookies de rastreo de terceros.</p>
       </>
     ),
   },
   terminos: {
-    title: 'Terminos y Condiciones',
+    title: 'Términos y condiciones',
     body: (
       <>
-        <p>Al usar este sitio, confirmas ser mayor de 18 anos. Todos los productos son para uso personal. No se permite la reventa.</p>
+        <p>Al usar este sitio, confirmas ser mayor de 18 años. Todos los productos son para uso personal. No se permite la reventa.</p>
         <h4 className="mt-6 text-lg font-medium text-white">Precios y disponibilidad</h4>
-        <p className="mt-2">Los precios pueden cambiar sin previo aviso. La disponibilidad de productos esta sujeta a stock existente.</p>
+        <p className="mt-2">Los precios pueden cambiar sin previo aviso. La disponibilidad de productos está sujeta a stock existente.</p>
         <h4 className="mt-6 text-lg font-medium text-white">Responsabilidad</h4>
         <p className="mt-2">AuraVapes no se hace responsable por el uso indebido de los productos. La nicotina es una sustancia adictiva. Consulta a un profesional de salud antes de usar.</p>
         <h4 className="mt-6 text-lg font-medium text-white">Propiedad intelectual</h4>
-        <p className="mt-2">Todos los contenidos de este sitio son propiedad de AuraVapes. Queda prohibida su reproduccion sin autorizacion.</p>
+        <p className="mt-2">Todos los contenidos de este sitio son propiedad de AuraVapes. Queda prohibida su reproducción sin autorización.</p>
       </>
     ),
   },
@@ -67,9 +67,9 @@ const content: Record<string, { title: string; body: React.ReactNode }> = {
           </table>
         </div>
         <h4 className="mt-6 text-lg font-medium text-white">Horario de entrega</h4>
-        <p className="mt-2">Lunes a Sabado, 10:00 AM - 8:00 PM. No realizamos entregas los domingos ni feriados.</p>
-        <h4 className="mt-6 text-lg font-medium text-white">Verificacion de edad</h4>
-        <p className="mt-2">La edad del comprador sera verificada al momento de la entrega con DNI original. Si no se puede verificar la edad, el pedido sera cancelado.</p>
+        <p className="mt-2">Lunes a sábado, 10:00 AM - 8:00 PM. No realizamos entregas los domingos ni feriados.</p>
+        <h4 className="mt-6 text-lg font-medium text-white">Verificación de edad</h4>
+        <p className="mt-2">La edad del comprador será verificada al momento de la entrega con DNI original. Si no se puede verificar la edad, el pedido será cancelado.</p>
       </>
     ),
   },
@@ -77,15 +77,15 @@ const content: Record<string, { title: string; body: React.ReactNode }> = {
     title: 'Cambios y Devoluciones',
     body: (
       <>
-        <p>Solo aceptamos devoluciones de productos con defecto de fabricacion.</p>
+        <p>Solo aceptamos devoluciones de productos con defecto de fabricación.</p>
         <h4 className="mt-6 text-lg font-medium text-white">Condiciones</h4>
         <ul className="mt-2 list-disc space-y-2 pl-5">
-          <li>El plazo para solicitar cambios es de 7 dias calendario desde la entrega.</li>
+          <li>El plazo para solicitar cambios es de 7 días calendario desde la entrega.</li>
           <li>El producto debe estar sin usar, con empaque original sellado.</li>
-          <li>No se aceptan devoluciones de liquidos abiertos o dispositivos usados por higiene.</li>
+          <li>No se aceptan devoluciones de líquidos abiertos o dispositivos usados por higiene.</li>
         </ul>
         <h4 className="mt-6 text-lg font-medium text-white">Proceso</h4>
-        <p className="mt-2">Contactanos por WhatsApp para iniciar un proceso de cambio. Te indicaremos los pasos a seguir segun el tipo de producto.</p>
+        <p className="mt-2">Contáctanos por WhatsApp para iniciar un proceso de cambio. Te indicaremos los pasos a seguir según el tipo de producto.</p>
       </>
     ),
   },
@@ -94,14 +94,14 @@ const content: Record<string, { title: string; body: React.ReactNode }> = {
     body: (
       <>
         <div className="rounded-xl border border-[#D4A853]/30 bg-[#D4A853]/10 p-6">
-          <p className="text-lg font-medium text-[#D4A853]">Venta exclusiva para mayores de 18 anos.</p>
+          <p className="text-lg font-medium text-[#D4A853]">Venta exclusiva para mayores de 18 años.</p>
         </div>
-        <h4 className="mt-6 text-lg font-medium text-white">Verificacion</h4>
-        <p className="mt-2">Se verifica la edad al momento de la entrega con documento de identidad original. Si el comprador no puede demostrar ser mayor de edad, el pedido sera cancelado.</p>
+        <h4 className="mt-6 text-lg font-medium text-white">Verificación</h4>
+        <p className="mt-2">Se verifica la edad al momento de la entrega con documento de identidad original. Si el comprador no puede demostrar ser mayor de edad, el pedido será cancelado.</p>
         <h4 className="mt-6 text-lg font-medium text-white">Contenido del sitio</h4>
-        <p className="mt-2">Este sitio web no esta dirigido a menores de edad. No utilizamos diseno, colores o lenguaje atractivo para menores.</p>
+        <p className="mt-2">Este sitio web no está dirigido a menores de edad. No utilizamos diseño, colores o lenguaje atractivo para menores.</p>
         <h4 className="mt-6 text-lg font-medium text-white">Advertencia sanitaria</h4>
-        <p className="mt-2">Los productos con nicotina son adictivos. No fumar es la opcion mas saludable. Si no eres fumador, no inicies.</p>
+        <p className="mt-2">Los productos con nicotina son adictivos. No fumar es la opción más saludable. Si no eres fumador, no inicies.</p>
       </>
     ),
   },
@@ -115,8 +115,8 @@ export default function PoliticasPage() {
     <>
       <div className="bg-[#141414] pt-28 pb-10 md:pt-32">
         <div className="mx-auto max-w-4xl px-5 md:px-12">
-          <h1 className="font-display text-4xl text-white md:text-5xl">Politicas</h1>
-          <p className="mt-2 text-lg text-white/70">Informacion importante sobre nuestros servicios</p>
+          <h1 className="font-display text-4xl text-white md:text-5xl">Políticas</h1>
+          <p className="mt-2 text-lg text-white/70">Información importante sobre nuestros servicios</p>
         </div>
       </div>
 

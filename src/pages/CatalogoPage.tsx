@@ -7,7 +7,7 @@ import type { Product, ProductCategory } from '@/types/product'
 
 const categories: ProductCategory[] = ['desechables', 'recargables', 'pods', 'liquidos', 'accesorios']
 const sortOptions = [
-  { value: 'bestseller', label: 'Mas vendidos' },
+  { value: 'bestseller', label: 'Más vendidos' },
   { value: 'newest', label: 'Nuevos' },
   { value: 'price_asc', label: 'Precio: bajo a alto' },
   { value: 'price_desc', label: 'Precio: alto a bajo' },
@@ -118,7 +118,7 @@ export default function CatalogoPage() {
     <div className="space-y-8">
       {/* Categoria */}
       <div>
-        <p className="text-xs font-medium uppercase tracking-[0.08em] text-white/40">CATEGORIA</p>
+        <p className="text-xs font-medium uppercase tracking-[0.08em] text-white/40">CATEGORÍA</p>
         <div className="mt-3 space-y-2.5">
           {categories.map((cat) => (
             <label key={cat} className="flex cursor-pointer items-center gap-3">
@@ -185,8 +185,8 @@ export default function CatalogoPage() {
       {/* Header */}
       <div className="bg-[#141414] pt-28 pb-10 md:pt-32">
         <div className="mx-auto max-w-7xl px-5 md:px-12">
-          <h1 className="font-display text-4xl text-white md:text-5xl">Catalogo</h1>
-          <p className="mt-2 text-lg text-white/70">Explora nuestra seleccion premium de productos de vapeo</p>
+          <h1 className="font-display text-4xl text-white md:text-5xl">Catálogo</h1>
+          <p className="mt-2 text-lg text-white/70">Explora nuestra selección premium de productos de vapeo</p>
 
           {/* Search */}
           <div className="relative mt-6 max-w-md">
@@ -270,7 +270,7 @@ export default function CatalogoPage() {
             {filtered.length === 0 && !loading && (
               <div className="mt-16 text-center">
                 <p className="text-xl text-white/60">No se encontraron productos</p>
-                <p className="mt-2 text-sm text-white/40">Intenta con otros terminos o filtros</p>
+                <p className="mt-2 text-sm text-white/40">Intenta con otros términos o filtros</p>
                 <button
                   onClick={clearFilters}
                   className="mt-4 rounded-xl bg-[#7C9A6B] px-6 py-3 text-sm font-medium text-black"

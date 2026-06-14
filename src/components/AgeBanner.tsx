@@ -12,7 +12,7 @@ export default function AgeBanner() {
         <div className="flex items-center gap-2">
           <AlertTriangle className="h-4 w-4 shrink-0 text-[#D4A853]" />
           <p className="text-xs text-[#D4A853] md:text-sm">
-            VENTA EXCLUSIVA PARA MAYORES DE 18 ANOS. La edad sera verificada al momento de la entrega.
+            VENTA EXCLUSIVA PARA MAYORES DE 18 AÑOS. La edad será verificada al momento de la entrega.
           </p>
         </div>
         <button

@@ -30,7 +30,7 @@ export default function AgeGate() {
       >
         <ShieldCheck className="mx-auto h-12 w-12 text-[#7C9A6B]" />
         <h2 className="font-display mt-6 text-3xl text-white md:text-4xl">
-          Verificacion de Edad
+          Verificación de edad
         </h2>
         <p className="mt-4 text-lg text-white/70">
           Este sitio contiene productos con nicotina destinados exclusivamente a adultos.
@@ -39,16 +39,16 @@ export default function AgeGate() {
           onClick={verifyAge}
           className="mt-8 w-full rounded-xl bg-[#7C9A6B] py-4 text-sm font-medium tracking-wide text-black transition-all hover:bg-[#6B8560] hover:scale-[1.02] active:scale-[0.98]"
         >
-          SOY MAYOR DE 18 ANOS
+          SOY MAYOR DE 18 AÑOS
         </button>
         <button
           onClick={() => window.location.href = 'https://www.google.com/search?q=adiccion+nicotina+ayuda'}
           className="mt-3 w-full rounded-xl border border-white/10 bg-transparent py-3.5 text-sm font-medium tracking-wide text-white transition-all hover:bg-white/5"
         >
-          Soy menor de 18 anos
+          Soy menor de 18 años
         </button>
         <p className="mt-6 text-xs text-white/40">
-          Al ingresar confirmas que eres mayor de edad y aceptas nuestros terminos y condiciones.
+          Al ingresar confirmas que eres mayor de edad y aceptas nuestros términos y condiciones.
         </p>
       </div>
 

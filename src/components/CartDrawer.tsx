@@ -57,14 +57,14 @@ export default function CartDrawer() {
         {items.length === 0 ? (
           <div className="flex flex-1 flex-col items-center justify-center px-6">
             <ShoppingBag className="h-12 w-12 text-white/30" />
-            <p className="mt-4 text-lg text-white">Tu carrito esta vacio</p>
+            <p className="mt-4 text-lg text-white">Tu carrito está vacío</p>
             <p className="mt-2 text-sm text-white/50">Agrega productos para comenzar tu pedido</p>
             <Link
               to="/catalogo"
               onClick={closeCart}
               className="mt-6 rounded-xl border border-[#7C9A6B] px-6 py-3 text-sm font-medium text-[#7C9A6B] transition-colors hover:bg-[#7C9A6B]/10"
             >
-              Ver Catalogo
+              Ver catálogo
             </Link>
           </div>
         ) : (
@@ -148,7 +148,7 @@ export default function CartDrawer() {
                 onClick={clearCart}
                 className="mt-3 w-full text-center text-xs text-red-400/70 hover:text-red-400"
               >
-                Limpiar Carrito
+                Vaciar carrito
               </button>
             </div>
           </>

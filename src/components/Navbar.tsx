@@ -6,7 +6,7 @@ import { useUIStore } from '@/stores/uiStore'
 
 const navLinks = [
   { to: '/', label: 'Inicio' },
-  { to: '/catalogo', label: 'Catalogo' },
+  { to: '/catalogo', label: 'Catálogo' },
   { to: '/contacto', label: 'Contacto' },
 ]
 

@@ -19,7 +19,7 @@ export default function ContactoPage() {
       <div className="bg-[#141414] pt-28 pb-10 md:pt-32">
         <div className="mx-auto max-w-7xl px-5 md:px-12">
           <h1 className="font-display text-4xl text-white md:text-5xl">Contacto</h1>
-          <p className="mt-2 text-lg text-white/70">Estamos aqui para ayudarte con tu pedido</p>
+          <p className="mt-2 text-lg text-white/70">Estamos aquí para ayudarte con tu pedido</p>
         </div>
       </div>
 
@@ -35,7 +35,7 @@ export default function ContactoPage() {
               className="flex items-center justify-center gap-3 rounded-xl bg-[#25D366] py-4 text-sm font-medium text-white transition-all hover:bg-[#1DA851]"
             >
               <MessageCircle className="h-5 w-5" />
-              Escribenos por WhatsApp
+              Escríbenos por WhatsApp
             </a>
 
             {/* Social Media Grid */}
@@ -88,7 +88,7 @@ export default function ContactoPage() {
               <div className="flex items-center gap-3">
                 <Clock className="h-5 w-5 shrink-0 text-[#7C9A6B]" />
                 <div>
-                  <p className="text-[15px] text-white">Lunes a Sabado: 10:00 AM - 8:00 PM</p>
+                  <p className="text-[15px] text-white">Lunes a sábado: 10:00 AM - 8:00 PM</p>
                   <p className="text-sm text-white/50">Domingo: Cerrado</p>
                 </div>
               </div>
@@ -125,12 +125,12 @@ export default function ContactoPage() {
 
               <div className="flex items-center gap-3">
                 <MapPin className="h-5 w-5 shrink-0 text-[#7C9A6B]" />
-                <p className="text-[15px] text-white">Lima, Peru</p>
+                <p className="text-[15px] text-white">Lima, Perú</p>
               </div>
             </div>
 
             <p className="mt-6 text-xs text-white/40">
-              Respondemos en menos de 30 minutos durante horario de atencion.
+              Respondemos en menos de 30 minutos durante horario de atención.
             </p>
           </div>
 

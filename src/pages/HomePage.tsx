@@ -135,7 +135,7 @@ function TrustIndicatorsSection() {
 /* ─── Zonas Section ─── */
 const zones = [
   { city: 'Lima' },
-  { city: 'Canete' },
+  { city: 'Cañete' },
   { city: 'Chincha' },
   { city: 'Ica' },
 ]
@@ -219,8 +219,8 @@ function FeaturedSection() {
 
 /* ─── Como Comprar Section ─── */
 const steps = [
-  { num: 1, icon: Search, title: 'Elige tus productos', desc: 'Navega nuestro catalogo y selecciona tus vapes favoritos' },
-  { num: 2, icon: ShoppingCart, title: 'Agrega al carrito', desc: 'Revisa tu seleccion y elige la cantidad deseada' },
+  { num: 1, icon: Search, title: 'Elige tus productos', desc: 'Navega nuestro catálogo y selecciona tus vapes favoritos' },
+  { num: 2, icon: ShoppingCart, title: 'Agrega al carrito', desc: 'Revisa tu selección y elige la cantidad deseada' },
   { num: 3, icon: MapPin, title: 'Selecciona tu zona', desc: 'Indica tu ciudad para la cobertura de entrega' },
   { num: 4, icon: MessageCircle, title: 'Recibe tu pedido', desc: 'Confirma por WhatsApp y coordinaremos el punto de encuentro' },
 ]
@@ -241,7 +241,7 @@ function ComoComprarSection() {
   return (
     <section className="bg-[#0A0A0A] py-16 md:py-28" ref={ref}>
       <div className="mx-auto max-w-7xl px-5 md:px-12">
-        <h2 className="text-center font-display text-3xl text-white md:text-5xl">Como Comprar</h2>
+        <h2 className="text-center font-display text-3xl text-white md:text-5xl">Cómo comprar</h2>
         <p className="mt-2 text-center text-lg text-white/70">Tu pedido en 4 simples pasos</p>
 
         <div className="mt-14 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
@@ -278,10 +278,10 @@ function WarningSection() {
         <div>
           <h3 className="text-xl font-medium text-[#C45B5B]">Advertencia de Salud</h3>
           <p className="mt-3 max-w-3xl text-[15px] leading-relaxed text-white/70">
-            Los productos con nicotina son adictivos y pueden ser perjudiciales para la salud. Estan destinados exclusivamente a adultos mayores de 18 anos. No fumar es la opcion mas saludable. Si no eres fumador, no inicies. Mantener fuera del alcance de ninos y adolescentes.
+            Los productos con nicotina son adictivos y pueden ser perjudiciales para la salud. Están destinados exclusivamente a adultos mayores de 18 años. No fumar es la opción más saludable. Si no eres fumador, no inicies. Mantener fuera del alcance de niños y adolescentes.
           </p>
           <p className="mt-3 text-sm text-[#C45B5B]">
-            Venta exclusiva para mayores de 18 anos. La edad sera verificada al momento de la entrega.
+            Venta exclusiva para mayores de 18 años. La edad será verificada al momento de la entrega.
           </p>
         </div>
       </div>

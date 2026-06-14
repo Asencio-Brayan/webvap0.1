@@ -3,9 +3,9 @@ import { MapPin, Clock, MessageCircle, Facebook, Mail } from 'lucide-react'
 
 const quickLinks = [
   { to: '/', label: 'Inicio' },
-  { to: '/catalogo', label: 'Catalogo' },
-  { to: '/politicas', label: 'Politicas de Privacidad' },
-  { to: '/politicas', label: 'Terminos y Condiciones' },
+  { to: '/catalogo', label: 'Catálogo' },
+  { to: '/politicas', label: 'Políticas de privacidad' },
+  { to: '/politicas', label: 'Términos y condiciones' },
   { to: '/contacto', label: 'Contacto' },
 ]
 
@@ -38,7 +38,7 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <p className="text-xs font-medium tracking-[0.08em] text-white/40">NAVEGACION</p>
+            <p className="text-xs font-medium tracking-[0.08em] text-white/40">NAVEGACIÓN</p>
             <ul className="mt-4 space-y-2.5">
               {quickLinks.map((link) => (
                 <li key={link.label}>
@@ -78,11 +78,11 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2.5 text-[15px] text-white/70">
                 <Clock className="h-4 w-4 shrink-0 text-[#7C9A6B]" />
-                Lunes a Sabado: 10am — 8pm
+                Lunes a sábado: 10am — 8pm
               </li>
               <li className="flex items-center gap-2.5 text-[15px] text-white/70">
                 <MapPin className="h-4 w-4 shrink-0 text-[#7C9A6B]" />
-                Lima, Peru
+                Lima, Perú
               </li>
             </ul>
 
@@ -111,7 +111,7 @@ export default function Footer() {
         <div className="mt-12 border-t border-white/10 pt-6">
           <div className="flex flex-col items-center justify-between gap-3 text-center text-[13px] text-white/40 md:flex-row">
             <p>&copy; 2025 AuraVapes. Todos los derechos reservados.</p>
-            <p>Ventas exclusivas para mayores de 18 anos.</p>
+            <p>Ventas exclusivas para mayores de 18 años.</p>
           </div>
         </div>
       </div>

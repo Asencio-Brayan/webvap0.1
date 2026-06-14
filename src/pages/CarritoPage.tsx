@@ -30,13 +30,13 @@ export default function CarritoPage() {
         {items.length === 0 ? (
           <div className="flex flex-col items-center py-20">
             <ShoppingBag className="h-20 w-20 text-white/20" />
-            <h2 className="mt-6 font-display text-3xl text-white">Tu carrito esta vacio</h2>
-            <p className="mt-2 text-lg text-white/50">Agrega productos desde nuestro catalogo para comenzar tu pedido.</p>
+            <h2 className="mt-6 font-display text-3xl text-white">Tu carrito está vacío</h2>
+            <p className="mt-2 text-lg text-white/50">Agrega productos desde nuestro catálogo para comenzar tu pedido.</p>
             <Link
               to="/catalogo"
               className="mt-6 rounded-xl bg-[#7C9A6B] px-8 py-4 text-sm font-medium text-black transition-all hover:bg-[#6B8560]"
             >
-              Ver Catalogo
+              Ver catálogo
             </Link>
           </div>
         ) : (
@@ -149,7 +149,7 @@ export default function CarritoPage() {
                   onClick={() => setShowClearConfirm(true)}
                   className="mt-4 w-full text-center text-xs text-red-400/70 hover:text-red-400"
                 >
-                  Limpiar Carrito
+                  Vaciar carrito
                 </button>
               </div>
             </div>
@@ -162,7 +162,7 @@ export default function CarritoPage() {
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 px-5">
           <div className="w-full max-w-sm rounded-2xl bg-[#141414] p-6 text-center">
             <h3 className="text-xl font-medium text-white">Vaciar carrito</h3>
-            <p className="mt-2 text-sm text-white/60">Estas seguro de eliminar todos los productos?</p>
+            <p className="mt-2 text-sm text-white/60">¿Estás seguro de eliminar todos los productos?</p>
             <div className="mt-6 flex gap-3">
               <button
                 onClick={() => setShowClearConfirm(false)}

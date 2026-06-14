@@ -85,7 +85,7 @@ export default function ProductoDetailPage() {
     desechables: 'Desechables',
     recargables: 'Recargables',
     pods: 'Pods',
-    liquidos: 'Liquidos',
+    liquidos: 'Líquidos',
     accesorios: 'Accesorios',
   }
 
@@ -97,7 +97,7 @@ export default function ProductoDetailPage() {
           <div className="flex items-center gap-2 text-[13px] text-white/40">
             <Link to="/" className="hover:text-white">Inicio</Link>
             <span>/</span>
-            <Link to="/catalogo" className="hover:text-white">Catalogo</Link>
+            <Link to="/catalogo" className="hover:text-white">Catálogo</Link>
             <span>/</span>
             <Link to={`/catalogo?cat=${product.category}`} className="capitalize hover:text-white">{categoryLabels[product.category]}</Link>
             <span>/</span>
@@ -208,7 +208,7 @@ export default function ProductoDetailPage() {
                     : 'bg-[#7C9A6B] text-black hover:bg-[#6B8560]'
                 } disabled:opacity-50 disabled:cursor-not-allowed`}
               >
-                {added ? 'Agregado!' : 'Agregar al Carrito'}
+                {added ? '¡Agregado!' : 'Agregar al carrito'}
               </button>
               <button className="flex h-14 w-14 items-center justify-center rounded-xl border border-white/10 text-white/60 transition-colors hover:bg-white/5 hover:text-white">
                 <Heart className="h-5 w-5" />
@@ -233,7 +233,7 @@ export default function ProductoDetailPage() {
             <div className="mt-6 flex items-start gap-2 rounded-lg border border-[#D4A853]/20 bg-[#D4A853]/10 p-4">
               <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-[#D4A853]" />
               <p className="text-xs text-[#D4A853]">
-                Este producto contiene nicotina. Venta exclusiva para mayores de 18 anos.
+                Este producto contiene nicotina. Venta exclusiva para mayores de 18 años.
               </p>
             </div>
             {/* Product Schema JSON-LD */}

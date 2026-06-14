@@ -49,12 +49,12 @@ export default function CheckoutPage() {
 
   const validate = (): boolean => {
     const errs: FormErrors = {}
-    if (!form.fullName.trim() || form.fullName.length < 2) errs.fullName = 'Nombre completo es requerido'
-    if (!form.dni.trim() || form.dni.length < 8) errs.dni = 'DNI debe tener al menos 8 digitos'
-    if (!form.phone.trim() || !/^\+?\d{9,12}$/.test(form.phone)) errs.phone = 'Numero de celular invalido'
-    if (!form.district.trim()) errs.district = 'Distrito es requerido'
-    if (!form.address.trim() || form.address.length < 5) errs.address = 'Direccion completa es requerida'
-    if (!form.ageConfirmed) errs.ageConfirmed = 'Debes confirmar que eres mayor de 18 anos'
+    if (!form.fullName.trim() || form.fullName.length < 2) errs.fullName = 'El nombre completo es requerido'
+    if (!form.dni.trim() || form.dni.length < 8) errs.dni = 'El DNI debe tener al menos 8 dígitos'
+    if (!form.phone.trim() || !/^\+?\d{9,12}$/.test(form.phone)) errs.phone = 'Número de celular inválido'
+    if (!form.district.trim()) errs.district = 'El distrito es requerido'
+    if (!form.address.trim() || form.address.length < 5) errs.address = 'La dirección completa es requerida'
+    if (!form.ageConfirmed) errs.ageConfirmed = 'Debes confirmar que eres mayor de 18 años'
     setErrors(errs)
     return Object.keys(errs).length === 0
   }
@@ -81,8 +81,8 @@ export default function CheckoutPage() {
       `Entrega (${form.city}): ${form.city === 'Otras ciudades' ? 'Coordinado con agencia' : 'Sin costo adicional'}%0A` +
       `*Total: S/ ${getTotal()}*%0A%0A` +
       `*Pago:* ${form.paymentMethod}%0A%0A` +
-      `*Confirmo que soy mayor de 18 anos.*%0A` +
-      `La edad sera verificada al momento de la entrega.%0A%0A` +
+      `*Confirmo que soy mayor de 18 años.*%0A` +
+      `La edad será verificada al momento de la entrega.%0A%0A` +
       `Comentarios: ${form.comments || 'Ninguno'}`
   }
 
@@ -121,10 +121,10 @@ export default function CheckoutPage() {
   if (items.length === 0) {
     return (
       <div className="mx-auto max-w-7xl px-5 py-32 text-center md:px-12">
-        <h2 className="font-display text-3xl text-white">Tu carrito esta vacio</h2>
+        <h2 className="font-display text-3xl text-white">Tu carrito está vacío</h2>
         <p className="mt-2 text-white/60">Agrega productos para continuar con tu pedido.</p>
         <Link to="/catalogo" className="mt-6 inline-block rounded-xl bg-[#7C9A6B] px-8 py-3 text-sm font-medium text-black">
-          Ver Catalogo
+          Ver catálogo
         </Link>
       </div>
     )
@@ -164,11 +164,11 @@ export default function CheckoutPage() {
                     type="text"
                     value={form.dni}
                     onChange={(e) => handleChange('dni', e.target.value)}
-                    placeholder="Numero de DNI"
+                    placeholder="Número de DNI"
                     className={`mt-1.5 w-full rounded-xl border bg-[#1A1A1A] px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none focus:border-[#7C9A6B] ${errors.dni ? 'border-red-500' : 'border-white/10'}`}
                   />
                   {errors.dni && <p className="mt-1 text-xs text-red-400">{errors.dni}</p>}
-                  <p className="mt-1 text-xs text-white/40">Sera verificado al momento de la entrega</p>
+                  <p className="mt-1 text-xs text-white/40">Será verificado al momento de la entrega</p>
                 </div>
                 <div>
                   <label className="text-sm text-white/70">Celular *</label>
@@ -228,7 +228,7 @@ export default function CheckoutPage() {
                   <textarea
                     value={form.reference}
                     onChange={(e) => handleChange('reference', e.target.value)}
-                    placeholder="Cerca de..., porton azul, etc."
+                    placeholder="Cerca de..., portón azul, etc."
                     rows={3}
                     className="mt-1.5 w-full rounded-xl border border-white/10 bg-[#1A1A1A] px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none focus:border-[#7C9A6B]"
                   />
@@ -238,7 +238,7 @@ export default function CheckoutPage() {
 
             {/* Payment */}
             <div className="rounded-2xl bg-[#141414] p-6 md:p-8">
-              <h3 className="text-lg font-medium text-white">Metodo de Pago</h3>
+              <h3 className="text-lg font-medium text-white">Método de pago</h3>
               <div className="mt-5 space-y-3">
                 {paymentMethods.map((method) => (
                   <label key={method.value} className="flex cursor-pointer items-center gap-3 rounded-xl border border-white/10 p-4 transition-colors hover:bg-white/[0.02]">
@@ -257,7 +257,7 @@ export default function CheckoutPage() {
               {form.paymentMethod !== 'contraentrega' && (
                 <div className="mt-4 rounded-xl border border-[#D4A853]/20 bg-[#D4A853]/10 p-4">
                   <p className="text-sm text-[#D4A853]">
-                    Te enviaremos los datos de pago (numero de Yape/Plin o cuenta bancaria) por WhatsApp al confirmar tu pedido.
+                    Te enviaremos los datos de pago (número de Yape/Plin o cuenta bancaria) por WhatsApp al confirmar tu pedido.
                   </p>
                 </div>
               )}
@@ -265,7 +265,7 @@ export default function CheckoutPage() {
 
             {/* Age confirmation */}
             <div className="rounded-2xl bg-[#141414] p-6 md:p-8">
-              <h3 className="text-lg font-medium text-white">Confirmacion</h3>
+              <h3 className="text-lg font-medium text-white">Confirmación</h3>
               <div className="mt-5">
                 <label className="flex cursor-pointer items-start gap-3">
                   <input
@@ -275,7 +275,7 @@ export default function CheckoutPage() {
                     className={`mt-0.5 h-4 w-4 rounded text-[#7C9A6B] focus:ring-[#7C9A6B] ${errors.ageConfirmed ? 'border-red-500' : 'border-white/20'}`}
                   />
                   <span className="text-[15px] leading-relaxed text-white">
-                    Confirmo que soy mayor de 18 anos y acepto que mi edad sera verificada al momento de la entrega.
+                    Confirmo que soy mayor de 18 años y acepto que mi edad será verificada al momento de la entrega.
                   </span>
                 </label>
                 {errors.ageConfirmed && <p className="mt-2 text-xs text-red-400">{errors.ageConfirmed}</p>}
@@ -353,7 +353,7 @@ export default function CheckoutPage() {
               <div className="mt-4 flex items-start gap-2 rounded-lg border border-[#D4A853]/20 bg-[#D4A853]/10 p-3">
                 <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#D4A853]" />
                 <p className="text-xs text-[#D4A853]">
-                  Recuerda: Debes presentar tu DNI original al recibir el pedido. Solo mayores de 18 anos.
+                  Recuerda: Debes presentar tu DNI original al recibir el pedido. Solo mayores de 18 años.
                 </p>
               </div>
             </div>
